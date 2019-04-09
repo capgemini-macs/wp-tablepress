@@ -143,7 +143,7 @@ abstract class TablePress {
 
 		// Load modals for table and options, to be accessible from everywhere via `TablePress::$model_options` and `TablePress::$model_table`.
 		self::$model_options = self::load_model( 'options' );
-		self::$model_table = self::load_model( 'table' );
+		self::$model_table   = self::load_model( 'table' );
 
 		if ( is_admin() ) {
 			$controller = 'admin';
@@ -221,7 +221,7 @@ abstract class TablePress {
 		// Model Base Class.
 		self::load_file( 'class-model.php', 'classes' );
 		// Make first letter uppercase for a better looking naming pattern.
-		$ucmodel = ucfirst( $model );
+		$ucmodel   = ucfirst( $model );
 		$the_model = self::load_class( "TablePress_{$ucmodel}_Model", "model-{$model}.php", 'models' );
 		return $the_model;
 	}
@@ -239,7 +239,7 @@ abstract class TablePress {
 		// View Base Class.
 		self::load_file( 'class-view.php', 'classes' );
 		// Make first letter uppercase for a better looking naming pattern.
-		$ucview = ucfirst( $view );
+		$ucview   = ucfirst( $view );
 		$the_view = self::load_class( "TablePress_{$ucview}_View", "view-{$view}.php", 'views' );
 		$the_view->setup( $view, $data );
 		return $the_view;
@@ -257,7 +257,7 @@ abstract class TablePress {
 		// Controller Base Class.
 		self::load_file( 'class-controller.php', 'classes' );
 		// Make first letter uppercase for a better looking naming pattern.
-		$uccontroller = ucfirst( $controller );
+		$uccontroller   = ucfirst( $controller );
 		$the_controller = self::load_class( "TablePress_{$uccontroller}_Controller", "controller-{$controller}.php", 'controllers' );
 		return $the_controller;
 	}
@@ -310,7 +310,7 @@ abstract class TablePress {
 	 */
 	public static function letter_to_number( $column ) {
 		$column = strtoupper( $column );
-		$count = strlen( $column );
+		$count  = strlen( $column );
 		$number = 0;
 		for ( $i = 0; $i < $count; $i++ ) {
 			$number += ( ord( $column[ $count - 1 - $i ] ) - 64 ) * pow( 26, $i );
@@ -407,7 +407,7 @@ abstract class TablePress {
 			'action' => false,
 			'item'   => false,
 		);
-		$params = array_merge( $default_params, $params );
+		$params         = array_merge( $default_params, $params );
 
 		$url = add_query_arg( $params, admin_url( $target ) );
 		if ( $add_nonce ) {

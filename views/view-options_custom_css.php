@@ -31,7 +31,7 @@ class TablePress_Options_Custom_CSS_View extends TablePress_View {
 	public function setup( $action, array $data ) {
 		// Set action manually here, to get correct page title and nav bar entries.
 		$this->action = 'options';
-		$this->data = $data;
+		$this->data   = $data;
 
 		// Set page title.
 		$GLOBALS['title'] = sprintf( __( '%1$s &lsaquo; %2$s', 'tablepress' ), $this->data['view_actions'][ $this->action ]['page_title'], 'TablePress' );
@@ -60,9 +60,9 @@ class TablePress_Options_Custom_CSS_View extends TablePress_View {
 		<?php
 			$this->print_nav_tab_menu();
 			// Print all header messages.
-			foreach ( $this->header_messages as $message ) {
-				echo $message;
-			}
+		foreach ( $this->header_messages as $message ) {
+			echo $message;
+		}
 
 			$this->do_text_boxes( 'header' );
 		?>
@@ -138,7 +138,16 @@ class TablePress_Options_Custom_CSS_View extends TablePress_View {
 			<?php _e( 'To proceed without trying to save the &#8220;Custom CSS&#8221; to a file, click the button below.', 'tablepress' ); ?>
 			<?php _e( 'Your &#8220;Custom CSS&#8221; will then be loaded inline.', 'tablepress' ); ?>
 		</p><p>
-			<a href="<?php echo TablePress::url( array( 'action' => 'options', 'message' => 'success_save_error_custom_css' ) ); ?>" class="button button-large"><?php _e( 'Proceed without saving &#8220;Custom CSS&#8221; to a file', 'tablepress' ); ?></a>
+			<a href="
+			<?php
+			echo TablePress::url(
+				array(
+					'action'  => 'options',
+					'message' => 'success_save_error_custom_css',
+				)
+			);
+			?>
+						" class="button button-large"><?php _e( 'Proceed without saving &#8220;Custom CSS&#8221; to a file', 'tablepress' ); ?></a>
 		</p>
 		<?php
 	}

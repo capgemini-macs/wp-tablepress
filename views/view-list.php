@@ -40,20 +40,31 @@ class TablePress_List_View extends TablePress_View {
 		parent::setup( $action, $data );
 
 		add_thickbox();
-		$this->admin_page->enqueue_script( 'list', array( 'jquery-core' ), array(
-			'list' => array(
-				'shortcode_popup'                  => __( 'To embed this table into a post or page, use this Shortcode:', 'tablepress' ),
-				'donation-message-already-donated' => __( 'Thank you very much! Your donation is highly appreciated. You just contributed to the further development of TablePress!', 'tablepress' ),
-				'donation-message-maybe-later'     => sprintf( __( 'No problem! I still hope you enjoy the benefits that TablePress adds to your site. If you should change your mind, you&#8217;ll always find the &#8220;Donate&#8221; button on the <a href="%s">TablePress website</a>.', 'tablepress' ), 'https://tablepress.org/' ),
-			),
-		) );
+		$this->admin_page->enqueue_script(
+			'list',
+			array( 'jquery-core' ),
+			array(
+				'list' => array(
+					'shortcode_popup'                  => __( 'To embed this table into a post or page, use this Shortcode:', 'tablepress' ),
+					'donation-message-already-donated' => __( 'Thank you very much! Your donation is highly appreciated. You just contributed to the further development of TablePress!', 'tablepress' ),
+					'donation-message-maybe-later'     => sprintf( __( 'No problem! I still hope you enjoy the benefits that TablePress adds to your site. If you should change your mind, you&#8217;ll always find the &#8220;Donate&#8221; button on the <a href="%s">TablePress website</a>.', 'tablepress' ), 'https://tablepress.org/' ),
+				),
+			)
+		);
 
 		if ( $data['messages']['first_visit'] ) {
 			$this->add_header_message(
 				'<strong><em>' . __( 'Welcome!', 'tablepress' ) . '</em></strong><br />'
 				. __( 'Thank you for using TablePress for the first time!', 'tablepress' ) . ' '
 				. sprintf( __( 'If you encounter any questions or problems, please visit the <a href="%1$s">FAQ</a>, the <a href="%2$s">documentation</a>, and the <a href="%3$s">Support</a> section on the <a href="%4$s">plugin website</a>.', 'tablepress' ), 'https://tablepress.org/faq/', 'https://tablepress.org/documentation/', 'https://tablepress.org/support/', 'https://tablepress.org/' ) . '<br /><br />'
-				. $this->ajax_link( array( 'action' => 'hide_message', 'item' => 'first_visit', 'return' => 'list' ), __( 'Hide this message', 'tablepress' ) ),
+				. $this->ajax_link(
+					array(
+						'action' => 'hide_message',
+						'item'   => 'first_visit',
+						'return' => 'list',
+					),
+					__( 'Hide this message', 'tablepress' )
+				),
 				'notice-info not-dismissible'
 			);
 		}
@@ -78,8 +89,24 @@ class TablePress_List_View extends TablePress_View {
 				. sprintf( __( '<a href="%s">Donations</a> help me to continue user support and development of this <em>free</em> software &mdash; things for which I spend countless hours of my free time! Thank you very much!', 'tablepress' ), 'https://tablepress.org/donate/' ) . '<br /><br />'
 				. __( 'Sincerely, Tobias', 'tablepress' ) . '<br /><br />'
 				. sprintf( '<a href="%s" target="_blank"><strong>%s</strong></a>', 'https://tablepress.org/donate/', __( 'Sure, I&#8217;ll buy you a coffee and support TablePress!', 'tablepress' ) ) . '&nbsp;&nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;&nbsp;&nbsp;'
-				. $this->ajax_link( array( 'action' => 'hide_message', 'item' => 'donation_nag', 'return' => 'list', 'target' => 'already-donated' ), __( 'I already donated.', 'tablepress' ) ) . '&nbsp;&nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;&nbsp;&nbsp;'
-				. $this->ajax_link( array( 'action' => 'hide_message', 'item' => 'donation_nag', 'return' => 'list', 'target' => 'maybe-later' ), __( 'No, thanks. Don&#8217;t ask again.', 'tablepress' ) ),
+				. $this->ajax_link(
+					array(
+						'action' => 'hide_message',
+						'item'   => 'donation_nag',
+						'return' => 'list',
+						'target' => 'already-donated',
+					),
+					__( 'I already donated.', 'tablepress' )
+				) . '&nbsp;&nbsp;&nbsp;&nbsp;&middot;&nbsp;&nbsp;&nbsp;&nbsp;'
+				. $this->ajax_link(
+					array(
+						'action' => 'hide_message',
+						'item'   => 'donation_nag',
+						'return' => 'list',
+						'target' => 'maybe-later',
+					),
+					__( 'No, thanks. Don&#8217;t ask again.', 'tablepress' )
+				),
 				'notice-success not-dismissible'
 			);
 		}
@@ -90,33 +117,48 @@ class TablePress_List_View extends TablePress_View {
 				. sprintf( __( 'Please read the <a href="%s">release announcement</a> for more information.', 'tablepress' ), 'https://tablepress.org/news/' ) . ' '
 				. sprintf( __( 'If you like the new features and enhancements, <a href="%s">giving a donation</a> towards the further support and development of TablePress is recommended. Thank you!', 'tablepress' ), 'https://tablepress.org/donate/' )
 				. '<br /><br />'
-				. $this->ajax_link( array( 'action' => 'hide_message', 'item' => 'plugin_update', 'return' => 'list' ), __( 'Hide this message', 'tablepress' ) ),
+				. $this->ajax_link(
+					array(
+						'action' => 'hide_message',
+						'item'   => 'plugin_update',
+						'return' => 'list',
+					),
+					__( 'Hide this message', 'tablepress' )
+				),
 				'notice-info not-dismissible'
 			);
 		}
 
-		$this->process_action_messages( array(
-			'success_delete'                   => _n( 'The table was deleted successfully.', 'The tables were deleted successfully.', 1, 'tablepress' ),
-			'success_delete_plural'            => _n( 'The table was deleted successfully.', 'The tables were deleted successfully.', 2, 'tablepress' ),
-			'error_delete'                     => __( 'Error: The table could not be deleted.', 'tablepress' ),
-			'error_save'                       => __( 'Error: The table could not be saved.', 'tablepress' ),
-			'success_copy'                     => _n( 'The table was copied successfully.', 'The tables were copied successfully.', 1, 'tablepress' ) . ( ( false !== $data['table_id'] ) ? ' ' . sprintf( __( 'The copied table has the table ID &#8220;%s&#8221;.', 'tablepress' ), esc_html( $data['table_id'] ) ) : '' ),
-			'success_copy_plural'              => _n( 'The table was copied successfully.', 'The tables were copied successfully.', 2, 'tablepress' ),
-			'error_copy'                       => __( 'Error: The table could not be copied.', 'tablepress' ),
-			'error_no_table'                   => __( 'Error: You did not specify a valid table ID.', 'tablepress' ),
-			'error_load_table'                 => __( 'Error: This table could not be loaded!', 'tablepress' ),
-			'error_bulk_action_invalid'        => __( 'Error: This bulk action is invalid!', 'tablepress' ),
-			'error_no_selection'               => __( 'Error: You did not select any tables!', 'tablepress' ),
-			'error_delete_not_all_tables'      => __( 'Notice: Not all selected tables could be deleted!', 'tablepress' ),
-			'error_copy_not_all_tables'        => __( 'Notice: Not all selected tables could be copied!', 'tablepress' ),
-			'success_import'                   => __( 'The tables were imported successfully.', 'tablepress' ),
-			'success_import_wp_table_reloaded' => __( 'The tables were imported successfully from WP-Table Reloaded.', 'tablepress' ),
-		) );
+		$this->process_action_messages(
+			array(
+				'success_delete'                   => _n( 'The table was deleted successfully.', 'The tables were deleted successfully.', 1, 'tablepress' ),
+				'success_delete_plural'            => _n( 'The table was deleted successfully.', 'The tables were deleted successfully.', 2, 'tablepress' ),
+				'error_delete'                     => __( 'Error: The table could not be deleted.', 'tablepress' ),
+				'error_save'                       => __( 'Error: The table could not be saved.', 'tablepress' ),
+				'success_copy'                     => _n( 'The table was copied successfully.', 'The tables were copied successfully.', 1, 'tablepress' ) . ( ( false !== $data['table_id'] ) ? ' ' . sprintf( __( 'The copied table has the table ID &#8220;%s&#8221;.', 'tablepress' ), esc_html( $data['table_id'] ) ) : '' ),
+				'success_copy_plural'              => _n( 'The table was copied successfully.', 'The tables were copied successfully.', 2, 'tablepress' ),
+				'error_copy'                       => __( 'Error: The table could not be copied.', 'tablepress' ),
+				'error_no_table'                   => __( 'Error: You did not specify a valid table ID.', 'tablepress' ),
+				'error_load_table'                 => __( 'Error: This table could not be loaded!', 'tablepress' ),
+				'error_bulk_action_invalid'        => __( 'Error: This bulk action is invalid!', 'tablepress' ),
+				'error_no_selection'               => __( 'Error: You did not select any tables!', 'tablepress' ),
+				'error_delete_not_all_tables'      => __( 'Notice: Not all selected tables could be deleted!', 'tablepress' ),
+				'error_copy_not_all_tables'        => __( 'Notice: Not all selected tables could be copied!', 'tablepress' ),
+				'success_import'                   => __( 'The tables were imported successfully.', 'tablepress' ),
+				'success_import_wp_table_reloaded' => __( 'The tables were imported successfully from WP-Table Reloaded.', 'tablepress' ),
+			)
+		);
 
 		$this->add_text_box( 'head', array( $this, 'textbox_head' ), 'normal' );
 		$this->add_text_box( 'tables-list', array( $this, 'textbox_tables_list' ), 'normal' );
 
-		add_screen_option( 'per_page', array( 'label' => __( 'Tables', 'tablepress' ), 'default' => 20 ) ); // Admin_Controller contains function to allow changes to this in the Screen Options to be saved
+		add_screen_option(
+			'per_page',
+			array(
+				'label'   => __( 'Tables', 'tablepress' ),
+				'default' => 20,
+			)
+		); // Admin_Controller contains function to allow changes to this in the Screen Options to be saved
 		$this->wp_list_table = new TablePress_All_Tables_List_Table();
 		$this->wp_list_table->set_items( $this->data['table_ids'] );
 		$this->wp_list_table->prepare_items();
@@ -136,9 +178,9 @@ class TablePress_List_View extends TablePress_View {
 		<?php
 			$this->print_nav_tab_menu();
 			// Print all header messages.
-			foreach ( $this->header_messages as $message ) {
-				echo $message;
-			}
+		foreach ( $this->header_messages as $message ) {
+			echo $message;
+		}
 
 			// For this screen, this is done in textbox_tables_list(), to get the fields into the correct <form>:
 			// $this->do_text_boxes( 'header' );
@@ -207,23 +249,23 @@ class TablePress_List_View extends TablePress_View {
 		if ( ! empty( $_GET['s'] ) ) {
 			printf( '<span class="subtitle">' . __( 'Search results for &#8220;%s&#8221;', 'tablepress' ) . '</span>', esc_html( wp_unslash( $_GET['s'] ) ) );
 		}
-	?>
+		?>
 <form method="get" action="">
-	<?php
-	if ( isset( $_GET['page'] ) ) {
-		echo '<input type="hidden" name="page" value="' . esc_attr( $_GET['page'] ) . '" />' . "\n";
-	}
-	$this->wp_list_table->search_box( __( 'Search Tables', 'tablepress' ), 'tables_search' );
-	?>
+		<?php
+		if ( isset( $_GET['page'] ) ) {
+			echo '<input type="hidden" name="page" value="' . esc_attr( $_GET['page'] ) . '" />' . "\n";
+		}
+		$this->wp_list_table->search_box( __( 'Search Tables', 'tablepress' ), 'tables_search' );
+		?>
 </form>
 <form action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" method="post">
-	<?php
+		<?php
 		// This prints the nonce and action fields for this screen (done here instead of render(), due to moved <form>).
 		$this->do_text_boxes( 'header' );
 		$this->wp_list_table->display();
-	?>
+		?>
 </form>
-	<?php
+		<?php
 	}
 
 	/**
@@ -235,10 +277,13 @@ class TablePress_List_View extends TablePress_View {
 	 * @param string $text   Text for the link.
 	 * @return string HTML code for the link.
 	 */
-	protected function ajax_link( array $params = array( 'action' => 'list', 'item' => '' ), $text ) {
-		$url = TablePress::url( $params, true, 'admin-post.php' );
+	protected function ajax_link( array $params = array(
+		'action' => 'list',
+		'item'   => '',
+	), $text ) {
+		$url    = TablePress::url( $params, true, 'admin-post.php' );
 		$action = esc_attr( $params['action'] );
-		$item = esc_attr( $params['item'] );
+		$item   = esc_attr( $params['item'] );
 		$target = isset( $params['target'] ) ? esc_attr( $params['target'] ) : '';
 		return "<a class=\"ajax-link\" href=\"{$url}\" data-action=\"{$action}\" data-item=\"{$item}\" data-target=\"{$target}\">{$text}</a>";
 	}
@@ -276,12 +321,14 @@ class TablePress_All_Tables_List_Table extends WP_List_Table {
 			update_user_option( get_current_user_id(), 'manage' . $screen->id . 'columnshidden', array( 'table_last_modified_by' ), true );
 		}
 
-		parent::__construct( array(
-			'singular' => 'tablepress-table',      // Singular name of the listed records.
-			'plural'   => 'tablepress-all-tables', // Plural name of the listed records.
-			'ajax'     => false,                   // Does this list table support AJAX?
-			'screen'   => $screen,                 // WP_Screen object.
-		) );
+		parent::__construct(
+			array(
+				'singular' => 'tablepress-table',      // Singular name of the listed records.
+				'plural'   => 'tablepress-all-tables', // Plural name of the listed records.
+				'ajax'     => false,                   // Does this list table support AJAX?
+				'screen'   => $screen,                 // WP_Screen object.
+			)
+		);
 	}
 
 	/**
@@ -292,7 +339,7 @@ class TablePress_All_Tables_List_Table extends WP_List_Table {
 	 * @param array $items Tables to be displayed in the List Table.
 	 */
 	public function set_items( array $items ) {
-		$this->items = $items;
+		$this->items       = $items;
 		$this->items_count = count( $items );
 	}
 
@@ -376,8 +423,9 @@ class TablePress_All_Tables_List_Table extends WP_List_Table {
 	 * @param array $item Data item for the current row.
 	 * @return string HTML content of the cell.
 	 */
-	protected function column_cb( /* array */ $item ) { // No `array` type hint to prevent a Strict Standards notice, as the method is inherited.
-		$user_can_copy_table = current_user_can( 'tablepress_copy_table', $item['id'] );
+	protected function column_cb( /* array */ $item ) {
+		// No `array` type hint to prevent a Strict Standards notice, as the method is inherited.
+		$user_can_copy_table   = current_user_can( 'tablepress_copy_table', $item['id'] );
 		$user_can_delete_table = current_user_can( 'tablepress_delete_table', $item['id'] );
 		$user_can_export_table = current_user_can( 'tablepress_export_table', $item['id'] );
 
@@ -413,17 +461,54 @@ class TablePress_All_Tables_List_Table extends WP_List_Table {
 	 * @return string HTML content of the cell.
 	 */
 	protected function column_table_name( array $item ) {
-		$user_can_edit_table = current_user_can( 'tablepress_edit_table', $item['id'] );
-		$user_can_copy_table = current_user_can( 'tablepress_copy_table', $item['id'] );
-		$user_can_export_table = current_user_can( 'tablepress_export_table', $item['id'] );
-		$user_can_delete_table = current_user_can( 'tablepress_delete_table', $item['id'] );
+		$user_can_edit_table    = current_user_can( 'tablepress_edit_table', $item['id'] );
+		$user_can_copy_table    = current_user_can( 'tablepress_copy_table', $item['id'] );
+		$user_can_export_table  = current_user_can( 'tablepress_export_table', $item['id'] );
+		$user_can_delete_table  = current_user_can( 'tablepress_delete_table', $item['id'] );
 		$user_can_preview_table = current_user_can( 'tablepress_preview_table', $item['id'] );
 
-		$edit_url = TablePress::url( array( 'action' => 'edit', 'table_id' => $item['id'] ) );
-		$copy_url = TablePress::url( array( 'action' => 'copy_table', 'item' => $item['id'], 'return' => 'list', 'return_item' => $item['id'] ), true, 'admin-post.php' );
-		$export_url = TablePress::url( array( 'action' => 'export', 'table_id' => $item['id'] ) );
-		$delete_url = TablePress::url( array( 'action' => 'delete_table', 'item' => $item['id'], 'return' => 'list', 'return_item' => $item['id'] ), true, 'admin-post.php' );
-		$preview_url = TablePress::url( array( 'action' => 'preview_table', 'item' => $item['id'], 'return' => 'list', 'return_item' => $item['id'] ), true, 'admin-post.php' );
+		$edit_url    = TablePress::url(
+			array(
+				'action'   => 'edit',
+				'table_id' => $item['id'],
+			)
+		);
+		$copy_url    = TablePress::url(
+			array(
+				'action'      => 'copy_table',
+				'item'        => $item['id'],
+				'return'      => 'list',
+				'return_item' => $item['id'],
+			),
+			true,
+			'admin-post.php'
+		);
+		$export_url  = TablePress::url(
+			array(
+				'action'   => 'export',
+				'table_id' => $item['id'],
+			)
+		);
+		$delete_url  = TablePress::url(
+			array(
+				'action'      => 'delete_table',
+				'item'        => $item['id'],
+				'return'      => 'list',
+				'return_item' => $item['id'],
+			),
+			true,
+			'admin-post.php'
+		);
+		$preview_url = TablePress::url(
+			array(
+				'action'      => 'preview_table',
+				'item'        => $item['id'],
+				'return'      => 'list',
+				'return_item' => $item['id'],
+			),
+			true,
+			'admin-post.php'
+		);
 
 		if ( '' === trim( $item['name'] ) ) {
 			$item['name'] = __( '(no name)', 'tablepress' );
@@ -505,8 +590,8 @@ class TablePress_All_Tables_List_Table extends WP_List_Table {
 	 */
 	protected function column_table_last_modified( array $item ) {
 		$modified_timestamp = strtotime( $item['last_modified'] );
-		$current_timestamp = current_time( 'timestamp' );
-		$time_diff = $current_timestamp - $modified_timestamp;
+		$current_timestamp  = current_time( 'timestamp' );
+		$time_diff          = $current_timestamp - $modified_timestamp;
 		// Time difference is only shown up to one day.
 		if ( $time_diff >= 0 && $time_diff < DAY_IN_SECONDS ) {
 			$time_diff = sprintf( __( '%s ago', 'tablepress' ), human_time_diff( $modified_timestamp, $current_timestamp ) );
@@ -526,7 +611,8 @@ class TablePress_All_Tables_List_Table extends WP_List_Table {
 	 * @param array  $item        Data item for the current row.
 	 * @param string $column_name Current column name.
 	 */
-	protected function column_default( /* array */ $item, $column_name ) { // No `array` type hint to prevent a Strict Standards notice, as the method is inherited.
+	protected function column_default( /* array */ $item, $column_name ) {
+		// No `array` type hint to prevent a Strict Standards notice, as the method is inherited.
 		/**
 		 * Fires inside each custom column of the TablePress list table.
 		 *
@@ -577,7 +663,7 @@ class TablePress_All_Tables_List_Table extends WP_List_Table {
 			/** This filter is documented in the WordPress function WP_List_Table::bulk_actions() in wp-admin/includes/class-wp-list-table.php */
 			$this->_actions = apply_filters( 'bulk_actions-' . $this->screen->id, $this->_actions );
 			$this->_actions = array_intersect_assoc( $this->_actions, $no_new_actions );
-			$two = '';
+			$two            = '';
 		} else {
 			$two = '2';
 		}
@@ -606,10 +692,10 @@ class TablePress_All_Tables_List_Table extends WP_List_Table {
 	public function no_items() {
 		_e( 'No tables found.', 'tablepress' );
 		if ( 0 === $this->items_count ) {
-			$user_can_add_tables = current_user_can( 'tablepress_add_tables' );
+			$user_can_add_tables    = current_user_can( 'tablepress_add_tables' );
 			$user_can_import_tables = current_user_can( 'tablepress_import_tables' );
 
-			$add_url = TablePress::url( array( 'action' => 'add' ) );
+			$add_url    = TablePress::url( array( 'action' => 'add' ) );
 			$import_url = TablePress::url( array( 'action' => 'import' ) );
 
 			if ( $user_can_add_tables && $user_can_import_tables ) {
@@ -660,7 +746,7 @@ class TablePress_All_Tables_List_Table extends WP_List_Table {
 	protected function _search_callback( $item ) {
 		static $term, $json_encoded_term;
 		if ( is_null( $term ) || is_null( $json_encoded_term ) ) {
-			$term = wp_unslash( $_GET['s'] );
+			$term              = wp_unslash( $_GET['s'] );
 			$json_encoded_term = substr( wp_json_encode( $term, TABLEPRESS_JSON_OPTIONS ), 1, -1 );
 		}
 
@@ -775,11 +861,13 @@ class TablePress_All_Tables_List_Table extends WP_List_Table {
 		$this->items = array_slice( $this->items, ( ( $current_page - 1 ) * $per_page ), $per_page );
 
 		// Register pagination options and calculation results.
-		$this->set_pagination_args( array(
-			'total_items' => $total_items,                     // Total number of records/items
-			'per_page'    => $per_page,                           // Number of items per page
-			'total_pages' => ceil( $total_items / $per_page ), // Total number of pages
-		) );
+		$this->set_pagination_args(
+			array(
+				'total_items' => $total_items,                     // Total number of records/items
+				'per_page'    => $per_page,                           // Number of items per page
+				'total_pages' => ceil( $total_items / $per_page ), // Total number of pages
+			)
+		);
 	}
 
 } // class TablePress_All_Tables_List_Table

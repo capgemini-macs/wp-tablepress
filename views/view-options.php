@@ -36,24 +36,34 @@ class TablePress_Options_View extends TablePress_View {
 		if ( ! empty( $codemirror_settings ) ) {
 			// Load CSS adjustments for CodeMirror and the added vertical resizing.
 			$this->admin_page->enqueue_style( 'codemirror', array( 'code-editor' ) );
-			$this->admin_page->enqueue_script( 'codemirror', array( 'jquery-core', 'jquery-ui-resizable' ), array(
-				'codemirror_settings' => $codemirror_settings,
-			) );
+			$this->admin_page->enqueue_script(
+				'codemirror',
+				array( 'jquery-core', 'jquery-ui-resizable' ),
+				array(
+					'codemirror_settings' => $codemirror_settings,
+				)
+			);
 		}
 
-		$this->admin_page->enqueue_script( 'options', array( 'jquery-core' ), array(
-			'strings' => array(
-				'uninstall_warning_1' => __( 'Do you really want to uninstall TablePress and delete ALL data?', 'tablepress' ),
-				'uninstall_warning_2' => __( 'Are you really sure?', 'tablepress' ),
+		$this->admin_page->enqueue_script(
+			'options',
+			array( 'jquery-core' ),
+			array(
+				'strings' => array(
+					'uninstall_warning_1' => __( 'Do you really want to uninstall TablePress and delete ALL data?', 'tablepress' ),
+					'uninstall_warning_2' => __( 'Are you really sure?', 'tablepress' ),
+				),
 			)
-		) );
+		);
 
-		$this->process_action_messages( array(
-			'success_save'                     => __( 'Options saved successfully.', 'tablepress' ),
-			'success_save_error_custom_css'    => __( 'Options saved successfully, but &#8220;Custom CSS&#8221; was not saved to file.', 'tablepress' ),
-			'error_save'                       => __( 'Error: Options could not be saved.', 'tablepress' ),
-			'success_import_wp_table_reloaded' => __( 'The WP-Table Reloaded &#8220;Custom CSS&#8221; was imported successfully.', 'tablepress' ),
-		) );
+		$this->process_action_messages(
+			array(
+				'success_save'                     => __( 'Options saved successfully.', 'tablepress' ),
+				'success_save_error_custom_css'    => __( 'Options saved successfully, but &#8220;Custom CSS&#8221; was not saved to file.', 'tablepress' ),
+				'error_save'                       => __( 'Error: Options could not be saved.', 'tablepress' ),
+				'success_import_wp_table_reloaded' => __( 'The WP-Table Reloaded &#8220;Custom CSS&#8221; was imported successfully.', 'tablepress' ),
+			)
+		);
 
 		$this->add_text_box( 'head', array( $this, 'textbox_head' ), 'normal' );
 		if ( current_user_can( 'tablepress_edit_options' ) ) {
@@ -82,10 +92,10 @@ class TablePress_Options_View extends TablePress_View {
 		</p>
 		<p>
 			<?php
-				if ( current_user_can( 'tablepress_edit_options' ) ) {
-					_e( 'Frontend Options influence the styling of tables in pages, posts, or text widgets, by defining which CSS code shall be loaded.', 'tablepress' );
-					echo '<br />';
-				}
+			if ( current_user_can( 'tablepress_edit_options' ) ) {
+				_e( 'Frontend Options influence the styling of tables in pages, posts, or text widgets, by defining which CSS code shall be loaded.', 'tablepress' );
+				echo '<br />';
+			}
 				_e( 'In the User Options, every TablePress user can choose the position of the plugin in his WordPress admin menu.', 'tablepress' );
 			?>
 		</p>
@@ -101,7 +111,7 @@ class TablePress_Options_View extends TablePress_View {
 	 * @param array $box  Information about the meta box.
 	 */
 	public function postbox_frontend_options( array $data, array $box ) {
-?>
+		?>
 <table class="tablepress-postbox-table fixed">
 <tbody>
 	<tr>
@@ -128,7 +138,7 @@ class TablePress_Options_View extends TablePress_View {
 	</tr>
 </tbody>
 </table>
-<?php
+		<?php
 	}
 
 	/**
@@ -161,8 +171,8 @@ class TablePress_Options_View extends TablePress_View {
 		}
 
 		// Add separator and generic positions.
-		$entries['-'] = '---';
-		$entries['top'] = __( 'Top-Level (top)', 'tablepress' );
+		$entries['-']      = '---';
+		$entries['top']    = __( 'Top-Level (top)', 'tablepress' );
 		$entries['middle'] = __( 'Top-Level (middle)', 'tablepress' );
 		$entries['bottom'] = __( 'Top-Level (bottom)', 'tablepress' );
 
@@ -178,7 +188,7 @@ class TablePress_Options_View extends TablePress_View {
 	</tr>
 </tbody>
 </table>
-<?php
+		<?php
 	}
 
 	/**

@@ -117,13 +117,13 @@ class TablePress_CSSTidy_optimise {
 	 * @param CSSTidy $css Instance of the CSSTidy class.
 	 */
 	public function __construct( $css ) {
-		$this->parser = $css;
-		$this->css = &$css->css;
+		$this->parser    = $css;
+		$this->css       = &$css->css;
 		$this->sub_value = &$css->sub_value;
-		$this->at = &$css->at;
-		$this->selector = &$css->selector;
-		$this->property = &$css->property;
-		$this->value = &$css->value;
+		$this->at        = &$css->at;
+		$this->selector  = &$css->selector;
+		$this->property  = &$css->property;
+		$this->value     = &$css->value;
 	}
 
 	/**
@@ -289,7 +289,7 @@ class TablePress_CSSTidy_optimise {
 	public function shorthand( $value ) {
 		$important = '';
 		if ( $this->parser->is_important( $value ) ) {
-			$values = $this->parser->gvw_important( $value );
+			$values    = $this->parser->gvw_important( $value );
 			$important = ' !important';
 		} else {
 			$values = $value;
@@ -457,7 +457,7 @@ class TablePress_CSSTidy_optimise {
 	 * @return string Compressed value.
 	 */
 	public function compress_numbers( $subvalue ) {
-		$unit_values = &$this->parser->data['csstidy']['unit_values'];
+		$unit_values  = &$this->parser->data['csstidy']['unit_values'];
 		$color_values = &$this->parser->data['csstidy']['color_values'];
 
 		// for font:1em/1em sans-serif...;
@@ -512,7 +512,7 @@ class TablePress_CSSTidy_optimise {
 			return false;
 		}
 
-		$units = &$this->parser->data['csstidy']['units'];
+		$units  = &$this->parser->data['csstidy']['units'];
 		$return = array( 0, '' );
 
 		$return[0] = floatval( $string );
@@ -533,7 +533,7 @@ class TablePress_CSSTidy_optimise {
 			$actualPosition = strpos( $string, $unitInString );
 			if ( $expectUnitAt === $actualPosition ) {
 				$return[1] = $unit;
-				$string = substr( $string, 0, - strlen( $unit ) );
+				$string    = substr( $string, 0, - strlen( $unit ) );
 				break;
 			}
 		}
@@ -597,7 +597,7 @@ class TablePress_CSSTidy_optimise {
 	 */
 	public function discard_invalid_selectors( &$array ) {
 		foreach ( $array as $selector => $decls ) {
-			$ok = true;
+			$ok        = true;
 			$selectors = array_map( 'trim', explode( ',', $selector ) );
 			foreach ( $selectors as $s ) {
 				$simple_selectors = preg_split( '/\s*[+>~\s]\s*/', $s );
@@ -636,7 +636,7 @@ class TablePress_CSSTidy_optimise {
 
 		$important = '';
 		if ( $this->parser->is_important( $value ) ) {
-			$value = $this->parser->gvw_important( $value );
+			$value     = $this->parser->gvw_important( $value );
 			$important = ' !important';
 		}
 		$values = explode( ' ', $value );
@@ -674,10 +674,10 @@ class TablePress_CSSTidy_optimise {
 	 */
 	public function explode_ws( $sep, $string ) {
 		$status = 'st';
-		$to = '';
+		$to     = '';
 
 		$output = array();
-		$num = 0;
+		$num    = 0;
 		for ( $i = 0, $len = strlen( $string ); $i < $len; $i++ ) {
 			switch ( $status ) {
 				case 'st':
@@ -685,7 +685,7 @@ class TablePress_CSSTidy_optimise {
 						++$num;
 					} elseif ( '"' === $string[ $i ] || "'" === $string[ $i ] || '(' === $string[ $i ] && ! $this->parser->escaped( $string, $i ) ) {
 						$status = 'str';
-						$to = ( '(' === $string[ $i ] ) ? ')' : $string[ $i ];
+						$to     = ( '(' === $string[ $i ] ) ? ')' : $string[ $i ];
 						( isset( $output[ $num ] ) ) ? $output[ $num ] .= $string[ $i ] : $output[ $num ] = $string[ $i ];
 					} else {
 						( isset( $output[ $num ] ) ) ? $output[ $num ] .= $string[ $i ] : $output[ $num ] = $string[ $i ];
@@ -717,7 +717,7 @@ class TablePress_CSSTidy_optimise {
 	 * @return [type] [description]
 	 */
 	public function merge_4value_shorthands( $array ) {
-		$return = $array;
+		$return     = $array;
 		$shorthands = &$this->parser->data['csstidy']['shorthands'];
 
 		foreach ( $shorthands as $key => $value ) {
@@ -729,7 +729,7 @@ class TablePress_CSSTidy_optimise {
 				for ( $i = 0; $i < 4; $i++ ) {
 					$val = $array[ $value[ $i ] ];
 					if ( $this->parser->is_important( $val ) ) {
-						$important = ' !important';
+						$important       = ' !important';
 						$return[ $key ] .= $this->parser->gvw_important( $val ) . ' ';
 					} else {
 						$return[ $key ] .= $val . ' ';
@@ -759,13 +759,13 @@ class TablePress_CSSTidy_optimise {
 		}
 
 		$background_prop_default = &$this->parser->data['csstidy']['background_prop_default'];
-		$repeat = array( 'repeat', 'repeat-x', 'repeat-y', 'no-repeat', 'space' );
-		$attachment = array( 'scroll', 'fixed', 'local' );
-		$clip = array( 'border', 'padding' );
-		$origin = array( 'border', 'padding', 'content' );
-		$pos = array( 'top', 'center', 'bottom', 'left', 'right' );
-		$important = '';
-		$return = array(
+		$repeat                  = array( 'repeat', 'repeat-x', 'repeat-y', 'no-repeat', 'space' );
+		$attachment              = array( 'scroll', 'fixed', 'local' );
+		$clip                    = array( 'border', 'padding' );
+		$origin                  = array( 'border', 'padding', 'content' );
+		$pos                     = array( 'top', 'center', 'bottom', 'left', 'right' );
+		$important               = '';
+		$return                  = array(
 			'background-image'      => null,
 			'background-size'       => null,
 			'background-repeat'     => null,
@@ -781,13 +781,13 @@ class TablePress_CSSTidy_optimise {
 			$str_value = $this->parser->gvw_important( $str_value );
 		}
 
-		$have = array();
+		$have      = array();
 		$str_value = $this->explode_ws( ',', $str_value );
 		for ( $i = 0; $i < count( $str_value ); $i++ ) {
-			$have['clip'] = false;
-			$have['pos'] = false;
+			$have['clip']  = false;
+			$have['pos']   = false;
 			$have['color'] = false;
-			$have['bg'] = false;
+			$have['bg']    = false;
 
 			if ( is_array( $str_value[ $i ] ) ) {
 				$str_value[ $i ] = $str_value[ $i ][0];
@@ -797,14 +797,14 @@ class TablePress_CSSTidy_optimise {
 			for ( $j = 0; $j < count( $str_value[ $i ] ); $j++ ) {
 				if ( false === $have['bg'] && ( 'url(' === substr( $str_value[ $i ][ $j ], 0, 4 ) || 'none' === $str_value[ $i ][ $j ] ) ) {
 					$return['background-image'] .= $str_value[ $i ][ $j ] . ',';
-					$have['bg'] = true;
+					$have['bg']                  = true;
 				} elseif ( in_array( $str_value[ $i ][ $j ], $repeat, true ) ) {
 					$return['background-repeat'] .= $str_value[ $i ][ $j ] . ',';
 				} elseif ( in_array( $str_value[ $i ][ $j ], $attachment, true ) ) {
 					$return['background-attachment'] .= $str_value[ $i ][ $j ] . ',';
 				} elseif ( in_array( $str_value[ $i ][ $j ], $clip, true ) && ! $have['clip'] ) {
 					$return['background-clip'] .= $str_value[ $i ][ $j ] . ',';
-					$have['clip'] = true;
+					$have['clip']               = true;
 				} elseif ( in_array( $str_value[ $i ][ $j ], $origin, true ) ) {
 					$return['background-origin'] .= $str_value[ $i ][ $j ] . ',';
 				} elseif ( '(' === $str_value[ $i ][ $j ][0] ) {
@@ -819,7 +819,7 @@ class TablePress_CSSTidy_optimise {
 					$have['pos'] = true;
 				} elseif ( ! $have['color'] ) {
 					$return['background-color'] .= $str_value[ $i ][ $j ] . ',';
-					$have['color'] = true;
+					$have['color']               = true;
 				}
 			}
 		}
@@ -851,7 +851,7 @@ class TablePress_CSSTidy_optimise {
 		// Array with background images to check if BG image exists.
 		$bg_img_array = @$this->explode_ws( ',', $this->parser->gvw_important( $input_css['background-image'] ) );
 		$new_bg_value = '';
-		$important = '';
+		$important    = '';
 
 		// If background properties is here and not empty, don't try anything.
 		if ( isset( $input_css['background'] ) && $input_css['background'] ) {
@@ -930,11 +930,11 @@ class TablePress_CSSTidy_optimise {
 	 */
 	public function dissolve_short_font( $str_value ) {
 		$font_prop_default = &$this->parser->data['csstidy']['font_prop_default'];
-		$font_weight = array( 'normal', 'bold', 'bolder', 'lighter', 100, 200, 300, 400, 500, 600, 700, 800, 900 );
-		$font_variant = array( 'normal', 'small-caps' );
-		$font_style = array( 'normal', 'italic', 'oblique' );
-		$important = '';
-		$return = array(
+		$font_weight       = array( 'normal', 'bold', 'bolder', 'lighter', 100, 200, 300, 400, 500, 600, 700, 800, 900 );
+		$font_variant      = array( 'normal', 'small-caps' );
+		$font_style        = array( 'normal', 'italic', 'oblique' );
+		$important         = '';
+		$return            = array(
 			'font-style'   => null,
 			'font-variant' => null,
 			'font-weight'  => null,
@@ -948,11 +948,11 @@ class TablePress_CSSTidy_optimise {
 			$str_value = $this->parser->gvw_important( $str_value );
 		}
 
-		$have = array();
-		$have['style'] = false;
+		$have            = array();
+		$have['style']   = false;
 		$have['variant'] = false;
-		$have['weight'] = false;
-		$have['size'] = false;
+		$have['weight']  = false;
+		$have['size']    = false;
 		// Detects if font-family consists of several words w/o quotes.
 		$multiwords = false;
 
@@ -964,15 +964,15 @@ class TablePress_CSSTidy_optimise {
 		for ( $j = 0; $j < count( $str_value[0] ); $j++ ) {
 			if ( false === $have['weight'] && in_array( $str_value[0][ $j ], $font_weight ) ) {
 				$return['font-weight'] = $str_value[0][ $j ];
-				$have['weight'] = true;
+				$have['weight']        = true;
 			} elseif ( false === $have['variant'] && in_array( $str_value[0][ $j ], $font_variant ) ) {
 				$return['font-variant'] = $str_value[0][ $j ];
-				$have['variant'] = true;
+				$have['variant']        = true;
 			} elseif ( false === $have['style'] && in_array( $str_value[0][ $j ], $font_style ) ) {
 				$return['font-style'] = $str_value[0][ $j ];
-				$have['style'] = true;
+				$have['style']        = true;
 			} elseif ( false === $have['size'] && ( is_numeric( $str_value[0][ $j ][0] ) || null === $str_value[0][ $j ][0] || '.' === $str_value[0][ $j ][0] ) ) {
-				$size = $this->explode_ws( '/', trim( $str_value[0][ $j ] ) );
+				$size                = $this->explode_ws( '/', trim( $str_value[0][ $j ] ) );
 				$return['font-size'] = $size[0];
 				if ( isset( $size[1] ) ) {
 					$return['line-height'] = $size[1];
@@ -983,7 +983,7 @@ class TablePress_CSSTidy_optimise {
 			} else {
 				if ( isset( $return['font-family'] ) ) {
 					$return['font-family'] .= ' ' . $str_value[0][ $j ];
-					$multiwords = true;
+					$multiwords             = true;
 				} else {
 					$return['font-family'] = $str_value[0][ $j ];
 				}
@@ -1025,17 +1025,17 @@ class TablePress_CSSTidy_optimise {
 	 */
 	public function merge_font( $input_css ) {
 		$font_prop_default = &$this->parser->data['csstidy']['font_prop_default'];
-		$new_font_value = '';
-		$important = '';
+		$new_font_value    = '';
+		$important         = '';
 		// Skip if no font-family and font-size set.
 		if ( isset( $input_css['font-family'] ) && isset( $input_css['font-size'] ) && 'inherit' !== $input_css['font-family'] ) {
 			// Fix several words in font-family - add quotes.
 			if ( isset( $input_css['font-family'] ) ) {
-				$families = explode( ',', $input_css['font-family'] );
+				$families        = explode( ',', $input_css['font-family'] );
 				$result_families = array();
 				foreach ( $families as $family ) {
 					$family = trim( $family );
-					$len = strlen( $family );
+					$len    = strlen( $family );
 					if ( strpos( $family, ' ' ) &&
 						! ( ( '"' === $family[0] && '"' === $family[ $len - 1 ] ) ||
 						( "'" === $family[0] && "'" === $family[ $len - 1 ] ) ) ) {

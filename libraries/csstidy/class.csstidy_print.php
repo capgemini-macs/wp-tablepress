@@ -140,12 +140,12 @@ class TablePress_CSSTidy_print {
 	 * @param CSSTidy $css Instance of the CSSTidy class.
 	 */
 	public function __construct( $css ) {
-		$this->parser = $css;
-		$this->css = &$css->css;
-		$this->template = &$css->template;
-		$this->tokens = &$css->tokens;
-		$this->charset = &$css->charset;
-		$this->import = &$css->import;
+		$this->parser    = $css;
+		$this->css       = &$css->css;
+		$this->template  = &$css->template;
+		$this->tokens    = &$css->tokens;
+		$this->charset   = &$css->charset;
+		$this->import    = &$css->import;
 		$this->namespace = &$css->namespace;
 	}
 
@@ -155,7 +155,7 @@ class TablePress_CSSTidy_print {
 	 * @since 1.0
 	 */
 	public function _reset() {
-		$this->output_css = '';
+		$this->output_css       = '';
 		$this->output_css_plain = '';
 	}
 
@@ -210,7 +210,7 @@ class TablePress_CSSTidy_print {
 				break;
 		}
 
-		$output = '';
+		$output                 = '';
 		$this->output_css_plain = &$output;
 
 		$output .= $doctype_output . "\n" . '<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="' . $lang . '"';
@@ -267,7 +267,7 @@ class TablePress_CSSTidy_print {
 				$import_components = explode( ' ', $this->import[ $i ] );
 				if ( 'url(' === substr( $import_components[0], 0, 4 ) && ')' === substr( $import_components[0], -1, 1 ) ) {
 					$import_components[0] = '\'' . trim( substr( $import_components[0], 4, -1 ), "'\"" ) . '\'';
-					$this->import[ $i ] = implode( ' ', $import_components );
+					$this->import[ $i ]   = implode( ' ', $import_components );
 					$this->parser->log( 'Optimised @import : Removed "url("', 'Information' );
 				} elseif ( ! preg_match( '/^".+"$/', $this->import[ $i ] ) ) {
 					// Fixes a bug for @import ".." instead of the expected @import url("..")/
@@ -288,7 +288,7 @@ class TablePress_CSSTidy_print {
 		}
 
 		$in_at_out = '';
-		$out = &$output;
+		$out       = &$output;
 
 		foreach ( $this->tokens as $key => $token ) {
 			switch ( $token[0] ) {
@@ -297,7 +297,7 @@ class TablePress_CSSTidy_print {
 						$token[1] = str_replace( ',', ",\n", $token[1] );
 					}
 					$out .= $template[0] . $this->_htmlsp( $token[1], $plain ) . $template[1];
-					$out = &$in_at_out;
+					$out  = &$in_at_out;
 					break;
 				case SEL_START:
 					if ( $this->parser->get_cfg( 'lowercase_s' ) ) {
@@ -335,11 +335,11 @@ class TablePress_CSSTidy_print {
 					}
 					break;
 				case AT_END:
-					$out = &$output;
+					$out       = &$output;
 					$in_at_out = str_replace( "\n\n", "\r\n", $in_at_out ); // don't fill empty lines
 					$in_at_out = str_replace( "\n", "\n" . $template[10], $in_at_out );
 					$in_at_out = str_replace( "\r\n", "\n\n", $in_at_out );
-					$out .= $template[10] . $in_at_out . $template[9];
+					$out      .= $template[10] . $in_at_out . $template[9];
 					$in_at_out = '';
 					break;
 				case COMMENT:
@@ -394,8 +394,8 @@ class TablePress_CSSTidy_print {
 	 * @param string $default_media Optional. Default @media to add to selectors without any @media.
 	 */
 	protected function _convert_raw_css( $default_media = '' ) {
-		$this->tokens = array();
-		$sort_selectors = $this->parser->get_cfg( 'sort_selectors' );
+		$this->tokens    = array();
+		$sort_selectors  = $this->parser->get_cfg( 'sort_selectors' );
 		$sort_properties = $this->parser->get_cfg( 'sort_properties' );
 
 		foreach ( $this->css as $medium => $val ) {

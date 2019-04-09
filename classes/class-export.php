@@ -95,11 +95,11 @@ class TablePress_Export {
 				}
 				break;
 			case 'html':
-				$num_rows = count( $table['data'] );
+				$num_rows     = count( $table['data'] );
 				$last_row_idx = $num_rows - 1;
-				$thead = '';
-				$tfoot = '';
-				$tbody = array();
+				$thead        = '';
+				$tfoot        = '';
+				$tbody        = array();
 
 				foreach ( $table['data'] as $row_idx => $row ) {
 					// First row, need to check for head (but only if at least two rows).

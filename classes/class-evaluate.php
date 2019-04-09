@@ -69,7 +69,7 @@ class TablePress_Evaluate {
 	public function evaluate_table_data( array $table_data ) {
 		$this->table_data = $table_data;
 
-		$rows = count( $this->table_data );
+		$rows    = count( $this->table_data );
 		$columns = count( $this->table_data[0] );
 		// Use two for-loops instead of foreach here to be sure to always work on the "live" table data and not some in-memory copy.
 		for ( $row_idx = 0; $row_idx < $rows; $row_idx++ ) {
@@ -110,7 +110,7 @@ class TablePress_Evaluate {
 
 		foreach ( $expressions as $expression ) {
 			$orig_expression = $expression[0];
-			$expression = $expression[1];
+			$expression      = $expression[1];
 
 			$replaced_references = $replaced_ranges = array();
 
@@ -134,24 +134,24 @@ class TablePress_Evaluate {
 					// No -1 necessary for this transformation, as we don't actually access the table.
 					$first_col = TablePress::letter_to_number( $cell_range[1] );
 					$first_row = $cell_range[2];
-					$last_col = TablePress::letter_to_number( $cell_range[3] );
-					$last_row = $cell_range[4];
+					$last_col  = TablePress::letter_to_number( $cell_range[3] );
+					$last_row  = $cell_range[4];
 
 					$col_start = min( $first_col, $last_col );
-					$col_end = max( $first_col, $last_col ) + 1; // +1 for loop below
+					$col_end   = max( $first_col, $last_col ) + 1; // +1 for loop below
 					$row_start = min( $first_row, $last_row );
-					$row_end = max( $first_row, $last_row ) + 1; // +1 for loop below
+					$row_end   = max( $first_row, $last_row ) + 1; // +1 for loop below
 
 					$cell_list = array();
 					for ( $col = $col_start; $col < $col_end; $col++ ) {
 						for ( $row = $row_start; $row < $row_end; $row++ ) {
-							$column = TablePress::number_to_letter( $col );
+							$column      = TablePress::number_to_letter( $col );
 							$cell_list[] = "{$column}{$row}";
 						}
 					}
 					$cell_list = implode( ',', $cell_list );
 
-					$expression = preg_replace( '#(?<![A-Z])' . preg_quote( $cell_range[0], '#' ) . '(?![0-9])#', $cell_list, $expression );
+					$expression                           = preg_replace( '#(?<![A-Z])' . preg_quote( $cell_range[0], '#' ) . '(?![0-9])#', $cell_list, $expression );
 					$this->known_ranges[ $cell_range[0] ] = $cell_list;
 				}
 			}
@@ -176,7 +176,7 @@ class TablePress_Evaluate {
 						return "!ERROR! Cell {$cell_reference[0]} does not exist";
 					}
 
-					$ref_parents = $parents;
+					$ref_parents   = $parents;
 					$ref_parents[] = $cell_reference[0];
 
 					$result = $this->table_data[ $ref_row ][ $ref_col ] = $this->_evaluate_cell( $this->table_data[ $ref_row ][ $ref_col ], $ref_parents );

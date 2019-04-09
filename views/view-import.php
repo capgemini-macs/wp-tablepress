@@ -39,25 +39,31 @@ class TablePress_Import_View extends TablePress_View {
 	public function setup( $action, array $data ) {
 		parent::setup( $action, $data );
 
-		$this->admin_page->enqueue_script( 'import', array( 'jquery-core' ), array(
-			'import' => array(
-				'error_wp_table_reloaded_nothing_selected' => __( 'Error: You did not select what to import from WP-Table Reloaded!', 'tablepress' ),
-			),
-		) );
+		$this->admin_page->enqueue_script(
+			'import',
+			array( 'jquery-core' ),
+			array(
+				'import' => array(
+					'error_wp_table_reloaded_nothing_selected' => __( 'Error: You did not select what to import from WP-Table Reloaded!', 'tablepress' ),
+				),
+			)
+		);
 
-		$this->process_action_messages( array(
-			'error_import'                             => __( 'Error: The import failed.', 'tablepress' ),
-			'error_no_zip_import'                      => __( 'Error: Import of ZIP files is not available on this server.', 'tablepress' ),
-			'error_import_zip_open'                    => __( 'Error: The ZIP file could not be opened.', 'tablepress' ),
-			'error_import_zip_content'                 => __( 'Error: The data in the ZIP file is invalid.', 'tablepress' ),
-			'error_import_no_existing_id'              => __( 'Error: You selected to replace or append to an existing table, but did not select a table.', 'tablepress' ),
-			'error_import_source_invalid'              => __( 'Error: The source for the import is invalid or could not be accessed.', 'tablepress' ),
-			'error_import_data'                        => __( 'Error: The data for the import is invalid.', 'tablepress' ),
-			'error_wp_table_reloaded_nothing_selected' => __( 'Error: You did not select what to import from WP-Table Reloaded!', 'tablepress' ),
-			'error_wp_table_reloaded_not_installed'    => __( 'Error: Existing WP-Table Reloaded tables were not found in the database.', 'tablepress' ),
-			'error_import_wp_table_reloaded'           => __( 'Error: The tables from WP-Table Reloaded could not be imported.', 'tablepress' ),
-			'error_wp_table_reloaded_dump_file'        => __( 'Error: The WP-Table Reloaded Dump File could not be imported!', 'tablepress' ),
-		) );
+		$this->process_action_messages(
+			array(
+				'error_import'                             => __( 'Error: The import failed.', 'tablepress' ),
+				'error_no_zip_import'                      => __( 'Error: Import of ZIP files is not available on this server.', 'tablepress' ),
+				'error_import_zip_open'                    => __( 'Error: The ZIP file could not be opened.', 'tablepress' ),
+				'error_import_zip_content'                 => __( 'Error: The data in the ZIP file is invalid.', 'tablepress' ),
+				'error_import_no_existing_id'              => __( 'Error: You selected to replace or append to an existing table, but did not select a table.', 'tablepress' ),
+				'error_import_source_invalid'              => __( 'Error: The source for the import is invalid or could not be accessed.', 'tablepress' ),
+				'error_import_data'                        => __( 'Error: The data for the import is invalid.', 'tablepress' ),
+				'error_wp_table_reloaded_nothing_selected' => __( 'Error: You did not select what to import from WP-Table Reloaded!', 'tablepress' ),
+				'error_wp_table_reloaded_not_installed'    => __( 'Error: Existing WP-Table Reloaded tables were not found in the database.', 'tablepress' ),
+				'error_import_wp_table_reloaded'           => __( 'Error: The tables from WP-Table Reloaded could not be imported.', 'tablepress' ),
+				'error_wp_table_reloaded_dump_file'        => __( 'Error: The WP-Table Reloaded Dump File could not be imported!', 'tablepress' ),
+			)
+		);
 
 		$this->add_text_box( 'head', array( $this, 'textbox_head' ), 'normal' );
 		$this->add_meta_box( 'import-form', __( 'Import Tables', 'tablepress' ), array( $this, 'postbox_import_form' ), 'normal' );
@@ -119,7 +125,7 @@ class TablePress_Import_View extends TablePress_View {
 	 * @param array $box  Information about the meta box.
 	 */
 	public function postbox_import_form( array $data, array $box ) {
-?>
+		?>
 <table class="tablepress-postbox-table fixed">
 <tbody>
 	<tr id="row-import-source">
@@ -155,7 +161,7 @@ class TablePress_Import_View extends TablePress_View {
 			?>
 		</td>
 	</tr>
-	<?php if ( ( ! is_multisite() && current_user_can( 'manage_options' ) ) || is_super_admin() ) { ?>
+		<?php if ( ( ! is_multisite() && current_user_can( 'manage_options' ) ) || is_super_admin() ) { ?>
 	<tr id="row-import-source-server" class="bottom-border">
 		<th class="column-1 top-align" scope="row"><label for="tables-import-server"><?php _e( 'Server Path to file', 'tablepress' ); ?>:</label></th>
 		<td class="column-2">
@@ -214,7 +220,7 @@ class TablePress_Import_View extends TablePress_View {
 				if ( '' === trim( $table['name'] ) ) {
 					$table['name'] = __( '(no name)', 'tablepress' );
 				}
-				$text = esc_html( sprintf( __( 'ID %1$s: %2$s', 'tablepress' ), $table['id'], $table['name'] ) );
+				$text     = esc_html( sprintf( __( 'ID %1$s: %2$s', 'tablepress' ), $table['id'], $table['name'] ) );
 				$selected = selected( $table['id'], $data['import_existing_table'], false );
 				echo "<option{$selected} value=\"{$table['id']}\">{$text}</option>";
 			}
@@ -228,7 +234,7 @@ class TablePress_Import_View extends TablePress_View {
 	</tr>
 </tbody>
 </table>
-<?php
+		<?php
 	}
 
 	/**
@@ -242,22 +248,24 @@ class TablePress_Import_View extends TablePress_View {
 	public function postbox_wp_table_reloaded_import( array $data, array $box ) {
 		?>
 <p>
-	<?php _e( 'To import all tables from a WP-Table Reloaded installation, choose the relevant import source below.', 'tablepress' ); ?>
+		<?php _e( 'To import all tables from a WP-Table Reloaded installation, choose the relevant import source below.', 'tablepress' ); ?>
 <br />
-	<?php _e( 'If WP-Table Reloaded is installed on this site, the &#8220;WordPress database&#8221; option is recommended.', 'tablepress' ); ?>
-	<?php _e( 'If you want to import tables from another site, create a &#8220;WP-Table Reloaded Dump File&#8221; there and upload it below, after choosing &#8220;WP-Table Reloaded Dump File&#8221;.', 'tablepress' ); ?>
+		<?php _e( 'If WP-Table Reloaded is installed on this site, the &#8220;WordPress database&#8221; option is recommended.', 'tablepress' ); ?>
+		<?php _e( 'If you want to import tables from another site, create a &#8220;WP-Table Reloaded Dump File&#8221; there and upload it below, after choosing &#8220;WP-Table Reloaded Dump File&#8221;.', 'tablepress' ); ?>
 <br />
-	<?php printf( __( 'Before doing this, it is highly recommended to read the <a href="%s">migration guide</a> on the TablePress website.', 'tablepress' ), 'https://tablepress.org/migration-from-wp-table-reloaded/' ); ?>
+		<?php printf( __( 'Before doing this, it is highly recommended to read the <a href="%s">migration guide</a> on the TablePress website.', 'tablepress' ), 'https://tablepress.org/migration-from-wp-table-reloaded/' ); ?>
 </p>
 <table class="tablepress-postbox-table fixed">
 <tbody>
 	<tr id="row-import-wp-table-reloaded-source">
 		<th class="column-1" scope="row"><?php _e( 'Import Source', 'tablepress' ); ?>:</th>
 		<td class="column-2">
-			<label for="import-wp-table-reloaded-source-db"><input name="import[wp_table_reloaded][source]" id="import-wp-table-reloaded-source-db" type="radio" value="db" <?php
+			<label for="import-wp-table-reloaded-source-db"><input name="import[wp_table_reloaded][source]" id="import-wp-table-reloaded-source-db" type="radio" value="db" 
+			<?php
 				checked( $data['import_wp_table_reloaded_source'], 'db', true );
 				disabled( $data['wp_table_reloaded_installed'], false, true );
-			?> /> <?php _e( 'WordPress database', 'tablepress' ); ?></label>
+			?>
+			 /> <?php _e( 'WordPress database', 'tablepress' ); ?></label>
 			<label for="import-wp-table-reloaded-source-dump-file"><input name="import[wp_table_reloaded][source]" id="import-wp-table-reloaded-source-dump-file" type="radio" value="dump-file"<?php checked( $data['import_wp_table_reloaded_source'], 'dump-file', true ); ?> /> <?php _e( 'WP-Table Reloaded Dump File', 'tablepress' ); ?></label>
 		</td>
 	</tr>
@@ -301,10 +309,18 @@ class TablePress_Import_View extends TablePress_View {
 		$content  = '<h3>' . __( 'TablePress Feature: Import from WP-Table Reloaded', 'tablepress' ) . '</h3>';
 		$content .= '<p>' . __( 'You can import your existing tables and &#8220;Custom CSS&#8221; from WP-Table Reloaded into TablePress.', 'tablepress' ) . '</p>';
 
-		$this->admin_page->print_wp_pointer_js( 'tp100_wp_table_reloaded_import', '#tablepress_import-import-wp-table-reloaded', array(
-			'content'  => $content,
-			'position' => array( 'edge' => 'bottom', 'align' => 'left', 'offset' => '16 -16' ),
-		) );
+		$this->admin_page->print_wp_pointer_js(
+			'tp100_wp_table_reloaded_import',
+			'#tablepress_import-import-wp-table-reloaded',
+			array(
+				'content'  => $content,
+				'position' => array(
+					'edge'   => 'bottom',
+					'align'  => 'left',
+					'offset' => '16 -16',
+				),
+			)
+		);
 	}
 
 } // class TablePress_Import_View

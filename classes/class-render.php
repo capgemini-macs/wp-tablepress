@@ -106,7 +106,7 @@ class TablePress_Render {
 	 * @param array $render_options Options for rendering, from both "Edit" screen and Shortcode.
 	 */
 	public function set_input( array $table, array $render_options ) {
-		$this->table = $table;
+		$this->table          = $table;
 		$this->render_options = $render_options;
 		/**
 		 * Filter the table before the render process.
@@ -144,7 +144,7 @@ class TablePress_Render {
 	protected function _evaluate_table_data() {
 		$orig_table = $this->table;
 
-		$formula_evaluator = TablePress::load_class( 'TablePress_Evaluate', 'class-evaluate.php', 'classes' );
+		$formula_evaluator   = TablePress::load_class( 'TablePress_Evaluate', 'class-evaluate.php', 'classes' );
 		$this->table['data'] = $formula_evaluator->evaluate_table_data( $this->table['data'] );
 		/**
 		 * Filter the table after evaluating formulas in the table.
@@ -166,11 +166,11 @@ class TablePress_Render {
 	protected function _prepare_render_data() {
 		$orig_table = $this->table;
 
-		$num_rows = count( $this->table['data'] );
+		$num_rows    = count( $this->table['data'] );
 		$num_columns = ( $num_rows > 0 ) ? count( $this->table['data'][0] ) : 0;
 
 		// Evaluate show/hide_rows/columns parameters.
-		$actions = array( 'show', 'hide' );
+		$actions  = array( 'show', 'hide' );
 		$elements = array( 'rows', 'columns' );
 		foreach ( $actions as $action ) {
 			foreach ( $elements as $element ) {
@@ -202,7 +202,7 @@ class TablePress_Render {
 							$end = TablePress::letter_to_number( $end );
 						}
 						$current_range = range( $start, $end );
-						$range_cells = array_merge( $range_cells, $current_range );
+						$range_cells   = array_merge( $range_cells, $current_range );
 					}
 				}
 				$this->render_options[ "{$action}_{$element}" ] = array_merge( $this->render_options[ "{$action}_{$element}" ], $range_cells );
@@ -264,7 +264,7 @@ class TablePress_Render {
 	 * @since 1.0.0
 	 */
 	protected function _render_table() {
-		$num_rows = count( $this->table['data'] );
+		$num_rows    = count( $this->table['data'] );
 		$num_columns = ( $num_rows > 0 ) ? count( $this->table['data'][0] ) : 0;
 
 		// Check if there are rows and columns in the table (might not be the case after removing hidden rows/columns!).
@@ -313,7 +313,7 @@ class TablePress_Render {
 			 * @param string $table_id The current table ID.
 			 */
 			$print_name_css_class = apply_filters( 'tablepress_print_name_css_class', "tablepress-table-name tablepress-table-name-id-{$this->table['id']}", $this->table['id'] );
-			$print_name_html = "<{$print_name_html_tag} class=\"{$print_name_css_class}\">" . $this->safe_output( $this->table['name'] ) . "</{$print_name_html_tag}>\n";
+			$print_name_html      = "<{$print_name_html_tag} class=\"{$print_name_css_class}\">" . $this->safe_output( $this->table['name'] ) . "</{$print_name_html_tag}>\n";
 		}
 		if ( $this->render_options['print_description'] ) {
 			/**
@@ -334,7 +334,7 @@ class TablePress_Render {
 			 * @param string $table_id The current table ID.
 			 */
 			$print_description_css_class = apply_filters( 'tablepress_print_description_css_class', "tablepress-table-description tablepress-table-description-id-{$this->table['id']}", $this->table['id'] );
-			$print_description_html = "<{$print_description_html_tag} class=\"{$print_description_css_class}\">" . $this->safe_output( $this->table['description'] ) . "</{$print_description_html_tag}>\n";
+			$print_description_html      = "<{$print_description_html_tag} class=\"{$print_description_css_class}\">" . $this->safe_output( $this->table['description'] ) . "</{$print_description_html_tag}>\n";
 		}
 
 		if ( $this->render_options['print_name'] && 'above' === $this->render_options['print_name_position'] ) {
@@ -353,7 +353,7 @@ class TablePress_Render {
 		$tfoot = '';
 		$tbody = array();
 
-		$this->last_row_idx = $num_rows - 1;
+		$this->last_row_idx    = $num_rows - 1;
 		$this->last_column_idx = $num_columns - 1;
 		// Loop through rows in reversed order, to search for rowspan trigger keyword.
 		for ( $row_idx = $this->last_row_idx; $row_idx >= 0; $row_idx-- ) {
@@ -387,7 +387,7 @@ class TablePress_Render {
 		 * @param string $caption The content for the HTML caption element of the table. Default empty.
 		 * @param array  $table   The current table.
 		 */
-		$caption = apply_filters( 'tablepress_print_caption_text', '', $this->table );
+		$caption       = apply_filters( 'tablepress_print_caption_text', '', $this->table );
 		$caption_style = $caption_class = '';
 		if ( ! empty( $caption ) ) {
 			/**
@@ -436,7 +436,7 @@ class TablePress_Render {
 				 * @param int    $col_idx    The number of the column.
 				 */
 				$attributes = apply_filters( 'tablepress_colgroup_tag_attributes', $attributes, $this->table['id'], $col_idx + 1 );
-				$colgroup .= "\t<col{$attributes}/>\n";
+				$colgroup  .= "\t<col{$attributes}/>\n";
 			}
 		}
 		if ( ! empty( $colgroup ) ) {
@@ -675,7 +675,7 @@ class TablePress_Render {
 				$tag = 'th';
 			}
 
-			$row_cells[] = "<{$tag}{$tag_attributes}>{$cell_content}</{$tag}>";
+			$row_cells[]               = "<{$tag}{$tag_attributes}>{$cell_content}</{$tag}>";
 			$this->colspan[ $row_idx ] = 1; // Reset.
 			$this->rowspan[ $col_idx ] = 1; // Reset.
 		}
@@ -823,10 +823,10 @@ class TablePress_Render {
 	 */
 	public function get_preview_css() {
 		if ( is_rtl() ) {
-			$rtl = "\ndirection: rtl;";
+			$rtl       = "\ndirection: rtl;";
 			$rtl_align = 'right';
 		} else {
-			$rtl = '';
+			$rtl       = '';
 			$rtl_align = 'left';
 		}
 		return <<<CSS

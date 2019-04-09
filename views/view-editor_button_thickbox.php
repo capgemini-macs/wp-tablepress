@@ -47,7 +47,7 @@ class TablePress_Editor_Button_Thickbox_View extends TablePress_View {
 	 */
 	public function setup( $action, array $data ) {
 		$this->action = $action;
-		$this->data = $data;
+		$this->data   = $data;
 
 		$this->wp_list_table = new TablePress_Editor_Button_Thickbox_List_Table();
 		$this->wp_list_table->set_items( $this->data['table_ids'] );
@@ -64,7 +64,7 @@ class TablePress_Editor_Button_Thickbox_View extends TablePress_View {
 
 		wp_print_styles( 'colors' );
 		wp_print_scripts( 'jquery-core' );
-?>
+		?>
 <title><?php printf( __( '%1$s &lsaquo; %2$s', 'tablepress' ), __( 'List of Tables', 'tablepress' ), 'TablePress' ); ?></title>
 <style type="text/css">
 /* Account for .wp-toolbar */
@@ -147,7 +147,7 @@ body {
 #tablepress-page .table-shortcode {
 	cursor: text;
 }
-<?php if ( is_rtl() ) : ?>
+		<?php if ( is_rtl() ) : ?>
 /* RTL CSS */
 body.rtl {
 	margin: 0 15px 15px 0;
@@ -174,23 +174,23 @@ body.rtl {
 <h1><?php printf( __( '%1$s &lsaquo; %2$s', 'tablepress' ), __( 'List of Tables', 'tablepress' ), 'TablePress' ); ?></h1>
 <div id="poststuff">
 <p>
-<?php _e( 'This is a list of all available tables.', 'tablepress' ); ?> <?php _e( 'You may insert a table into a post or page here.', 'tablepress' ); ?>
+		<?php _e( 'This is a list of all available tables.', 'tablepress' ); ?> <?php _e( 'You may insert a table into a post or page here.', 'tablepress' ); ?>
 </p><p>
-<?php printf( __( 'Click the &#8220;%1$s&#8221; button for the desired table to automatically insert the<br />corresponding Shortcode (%2$s) into the editor.', 'tablepress' ), __( 'Insert Shortcode', 'tablepress' ), '<input type="text" class="table-shortcode table-shortcode-inline ltr" value="' . esc_attr( '[' . TablePress::$shortcode . ' id=<ID> /]' ) . '" readonly="readonly" />' ); ?>
+		<?php printf( __( 'Click the &#8220;%1$s&#8221; button for the desired table to automatically insert the<br />corresponding Shortcode (%2$s) into the editor.', 'tablepress' ), __( 'Insert Shortcode', 'tablepress' ), '<input type="text" class="table-shortcode table-shortcode-inline ltr" value="' . esc_attr( '[' . TablePress::$shortcode . ' id=<ID> /]' ) . '" readonly="readonly" />' ); ?>
 </p>
-<?php
-	if ( ! empty( $_GET['s'] ) ) {
-		printf( '<span class="subtitle">' . __( 'Search results for &#8220;%s&#8221;', 'tablepress' ) . '</span>', esc_html( wp_unslash( $_GET['s'] ) ) );
-	}
-?>
+		<?php
+		if ( ! empty( $_GET['s'] ) ) {
+			printf( '<span class="subtitle">' . __( 'Search results for &#8220;%s&#8221;', 'tablepress' ) . '</span>', esc_html( wp_unslash( $_GET['s'] ) ) );
+		}
+		?>
 <form method="get" action="">
 	<input type="hidden" name="action" value="tablepress_<?php echo $this->action; ?>" />
-<?php
-	wp_nonce_field( TablePress::nonce( $this->action ), '_wpnonce', false );
-	$this->wp_list_table->search_box( __( 'Search Tables', 'tablepress' ), 'tables_search' );
-?>
+		<?php
+		wp_nonce_field( TablePress::nonce( $this->action ), '_wpnonce', false );
+		$this->wp_list_table->search_box( __( 'Search Tables', 'tablepress' ), 'tables_search' );
+		?>
 </form>
-	<?php $this->wp_list_table->display(); ?>
+		<?php $this->wp_list_table->display(); ?>
 </div>
 </div>
 <script type="text/javascript">
@@ -208,7 +208,7 @@ jQuery( document ).ready( function( $ ) {
 </script>
 </body>
 </html>
-<?php
+		<?php
 	}
 
 } // class TablePress_Editor_Button_View
@@ -237,12 +237,14 @@ class TablePress_Editor_Button_Thickbox_List_Table extends WP_List_Table {
 	 * @since 1.0.0
 	 */
 	public function __construct() {
-		parent::__construct( array(
-			'singular' => 'tablepress-table',              // Singular name of the listed records.
-			'plural'   => 'tablepress-editor-button-list', // Plural name of the listed records.
-			'ajax'     => false,                           // Does this list table support AJAX?
-			'screen'   => get_current_screen(),            // WP_Screen object.
-		) );
+		parent::__construct(
+			array(
+				'singular' => 'tablepress-table',              // Singular name of the listed records.
+				'plural'   => 'tablepress-editor-button-list', // Plural name of the listed records.
+				'ajax'     => false,                           // Does this list table support AJAX?
+				'screen'   => get_current_screen(),            // WP_Screen object.
+			)
+		);
 	}
 
 	/**
@@ -253,7 +255,7 @@ class TablePress_Editor_Button_Thickbox_List_Table extends WP_List_Table {
 	 * @param array $items Tables to be displayed in the List Table.
 	 */
 	public function set_items( array $items ) {
-		$this->items = $items;
+		$this->items       = $items;
 		$this->items_count = count( $items );
 	}
 
@@ -427,7 +429,7 @@ class TablePress_Editor_Button_Thickbox_List_Table extends WP_List_Table {
 	protected function _search_callback( $item ) {
 		static $term, $json_encoded_term;
 		if ( is_null( $term ) || is_null( $json_encoded_term ) ) {
-			$term = wp_unslash( $_GET['s'] );
+			$term              = wp_unslash( $_GET['s'] );
 			$json_encoded_term = substr( wp_json_encode( $term, TABLEPRESS_JSON_OPTIONS ), 1, -1 );
 		}
 
@@ -512,11 +514,13 @@ class TablePress_Editor_Button_Thickbox_List_Table extends WP_List_Table {
 		$this->items = array_slice( $this->items, ( ( $current_page - 1 ) * $per_page ), $per_page );
 
 		// Register pagination options and calculation results.
-		$this->set_pagination_args( array(
-			'total_items' => $total_items,                     // Total number of records/items
-			'per_page'    => $per_page,                           // Number of items per page
-			'total_pages' => ceil( $total_items / $per_page ), // Total number of pages
-		) );
+		$this->set_pagination_args(
+			array(
+				'total_items' => $total_items,                     // Total number of records/items
+				'per_page'    => $per_page,                           // Number of items per page
+				'total_pages' => ceil( $total_items / $per_page ), // Total number of pages
+			)
+		);
 	}
 
 } // class TablePress_Editor_Button_Thickbox_List_Table

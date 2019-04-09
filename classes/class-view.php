@@ -98,16 +98,18 @@ abstract class TablePress_View {
 		// Enable two column layout.
 		add_filter( "get_user_option_screen_layout_{$screen->id}", array( $this, 'set_current_screen_layout_columns' ) );
 
-		$screen->add_help_tab( array(
-			'id'      => 'tablepress-help', // This should be unique for the screen.
-			'title'   => __( 'TablePress Help', 'tablepress' ),
-			'content' => '<p>' . $this->help_tab_content() . '</p>'
-						. '<p>' . sprintf( __( 'More information about TablePress can be found on the <a href="%1$s">plugin&#8217;s website</a> or on its page in the <a href="%2$s">WordPress Plugin Directory</a>.', 'tablepress' ), 'https://tablepress.org/', 'https://wordpress.org/plugins/tablepress/' ) . ' '
-						. sprintf( __( 'For technical information, please see the <a href="%s">documentation</a>.', 'tablepress' ), 'https://tablepress.org/documentation/' ) . ' '
-						. sprintf( __( '<a href="%1$s">Support</a> is provided through the <a href="%2$s">WordPress Support Forums</a>.', 'tablepress' ), 'https://tablepress.org/support/', 'https://wordpress.org/tags/tablepress' ) . ' '
-						. sprintf( __( 'Before asking for support, please carefully read the <a href="%s">Frequently Asked Questions</a>, where you will find answers to the most common questions, and search through the forums.', 'tablepress' ), 'https://tablepress.org/faq/' ) . '<br />'
-						. sprintf( __( 'If you like the plugin, <a href="%1$s"><strong>a donation</strong></a> is recommended.', 'tablepress' ), 'https://tablepress.org/donate/' ) . '</p>',
-		) );
+		$screen->add_help_tab(
+			array(
+				'id'      => 'tablepress-help', // This should be unique for the screen.
+				'title'   => __( 'TablePress Help', 'tablepress' ),
+				'content' => '<p>' . $this->help_tab_content() . '</p>'
+							. '<p>' . sprintf( __( 'More information about TablePress can be found on the <a href="%1$s">plugin&#8217;s website</a> or on its page in the <a href="%2$s">WordPress Plugin Directory</a>.', 'tablepress' ), 'https://tablepress.org/', 'https://wordpress.org/plugins/tablepress/' ) . ' '
+							. sprintf( __( 'For technical information, please see the <a href="%s">documentation</a>.', 'tablepress' ), 'https://tablepress.org/documentation/' ) . ' '
+							. sprintf( __( '<a href="%1$s">Support</a> is provided through the <a href="%2$s">WordPress Support Forums</a>.', 'tablepress' ), 'https://tablepress.org/support/', 'https://wordpress.org/tags/tablepress' ) . ' '
+							. sprintf( __( 'Before asking for support, please carefully read the <a href="%s">Frequently Asked Questions</a>, where you will find answers to the most common questions, and search through the forums.', 'tablepress' ), 'https://tablepress.org/faq/' ) . '<br />'
+							. sprintf( __( 'If you like the plugin, <a href="%1$s"><strong>a donation</strong></a> is recommended.', 'tablepress' ), 'https://tablepress.org/donate/' ) . '</p>',
+			)
+		);
 		// "sidebar" in the help tab.
 		$screen->set_help_sidebar( '<p><strong>' . __( 'For more information:', 'tablepress' ) . '</strong></p><p><a href="https://tablepress.org/" target="_blank">TablePress Website</a></p><p><a href="https://tablepress.org/faq/" target="_blank">TablePress FAQ</a></p><p><a href="https://tablepress.org/documentation/" target="_blank">TablePress Documentation</a></p><p><a href="https://tablepress.org/support/" target="_blank">TablePress Support</a></p>' );
 	}
@@ -141,7 +143,7 @@ abstract class TablePress_View {
 	 */
 	public function setup( $action, array $data ) {
 		$this->action = $action;
-		$this->data = $data;
+		$this->data   = $data;
 
 		// Set page title.
 		$GLOBALS['title'] = sprintf( __( '%1$s &lsaquo; %2$s', 'tablepress' ), $this->data['view_actions'][ $this->action ]['page_title'], 'TablePress' );
@@ -153,12 +155,16 @@ abstract class TablePress_View {
 		if ( is_rtl() ) {
 			$this->admin_page->enqueue_style( 'common-rtl', array( 'tablepress-common' ) );
 		}
-		$this->admin_page->enqueue_script( 'common', array( 'jquery-core', 'postbox' ), array(
-			'common' => array(
-				'ays_delete_single_table'    => _n( 'Do you really want to delete this table?', 'Do you really want to delete these tables?', 1, 'tablepress' ),
-				'ays_delete_multiple_tables' => _n( 'Do you really want to delete this table?', 'Do you really want to delete these tables?', 2, 'tablepress' ),
+		$this->admin_page->enqueue_script(
+			'common',
+			array( 'jquery-core', 'postbox' ),
+			array(
+				'common' => array(
+					'ays_delete_single_table'    => _n( 'Do you really want to delete this table?', 'Do you really want to delete these tables?', 1, 'tablepress' ),
+					'ays_delete_multiple_tables' => _n( 'Do you really want to delete this table?', 'Do you really want to delete these tables?', 2, 'tablepress' ),
+				),
 			)
-		) );
+		);
 
 		$this->admin_page->add_admin_footer_text();
 
@@ -215,7 +221,7 @@ abstract class TablePress_View {
 			$this->textboxes[ $context ] = array();
 		}
 
-		$long_id = "tablepress_{$this->action}-{$id}";
+		$long_id                            = "tablepress_{$this->action}-{$id}";
 		$this->textboxes[ $context ][ $id ] = array(
 			'id'       => $long_id,
 			'callback' => $callback,
@@ -334,9 +340,9 @@ abstract class TablePress_View {
 		<?php
 			$this->print_nav_tab_menu();
 			// Print all header messages.
-			foreach ( $this->header_messages as $message ) {
-				echo $message;
-			}
+		foreach ( $this->header_messages as $message ) {
+			echo $message;
+		}
 			// "Import" screen has file upload.
 			$enctype = ( 'import' === $this->action ) ? ' enctype="multipart/form-data"' : '';
 		?>
@@ -391,8 +397,8 @@ abstract class TablePress_View {
 					continue;
 				}
 
-				$url = esc_url( TablePress::url( array( 'action' => $action ) ) );
-				$active = ( $action === $this->action ) ? ' nav-tab-active' : '';
+				$url       = esc_url( TablePress::url( array( 'action' => $action ) ) );
+				$active    = ( $action === $this->action ) ? ' nav-tab-active' : '';
 				$separator = ( 'options' === $action ) ? ' nav-tab-separator' : ''; // Make the "Plugin Options" entry a separator, for some spacing.
 				echo "<a class=\"nav-tab{$active}{$separator}\" href=\"{$url}\">{$entry['nav_tab_title']}</a>";
 			}

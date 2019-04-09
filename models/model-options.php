@@ -77,13 +77,13 @@ class TablePress_Options_Model extends TablePress_Model {
 	public function __construct() {
 		parent::__construct();
 
-		$params = array(
+		$params               = array(
 			'option_name'   => 'tablepress_plugin_options',
 			'default_value' => $this->default_plugin_options,
 		);
 		$this->plugin_options = TablePress::load_class( 'TablePress_WP_Option', 'class-wp_option.php', 'classes', $params );
 
-		$params = array(
+		$params             = array(
 			'option_name'   => 'tablepress_user_options',
 			'default_value' => $this->default_user_options,
 		);
@@ -108,7 +108,7 @@ class TablePress_Options_Model extends TablePress_Model {
 		}
 
 		$plugin_options = $this->plugin_options->get();
-		$user_options = $this->user_options->get();
+		$user_options   = $this->user_options->get();
 		foreach ( $new_options as $name => $value ) {
 			if ( isset( $this->default_plugin_options[ $name ] ) ) {
 				$plugin_options[ $name ] = $value;

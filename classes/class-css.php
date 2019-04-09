@@ -75,7 +75,7 @@ class TablePress_CSS {
 	 * @return string Minified CSS code.
 	 */
 	public function minify_css( $css ) {
-		$csstidy = TablePress::load_class( 'TablePress_CSSTidy', 'class.csstidy.php', 'libraries/csstidy' );
+		$csstidy           = TablePress::load_class( 'TablePress_CSSTidy', 'class.csstidy.php', 'libraries/csstidy' );
 		$csstidy->optimise = new TablePress_CSSTidy_custom_sanitize( $csstidy );
 		$csstidy->set_cfg( 'remove_bslash', false );
 		$csstidy->set_cfg( 'compress_colors', true );
@@ -324,7 +324,7 @@ class TablePress_CSS {
 			$absolute_path = plugins_url( 'css/tablepress.', TABLEPRESS__FILE__ );
 			// Make the absolute URL protocol-relative to prevent mixed content warnings.
 			$absolute_path = str_replace( array( 'http:', 'https:' ), '', $absolute_path );
-			$default_css = str_replace( 'url(tablepress.', 'url(' . $absolute_path, $default_css );
+			$default_css   = str_replace( 'url(tablepress.', 'url(' . $absolute_path, $default_css );
 		}
 		$file_content = array(
 			'normal'   => $custom_css_normal,
@@ -343,7 +343,7 @@ class TablePress_CSS {
 			if ( '' !== $path_difference ) {
 				$filename = str_replace( $path_difference, '', $filename );
 			}
-			$result = $wp_filesystem->put_contents( $filename, $file_content[ $css_type ], FS_CHMOD_FILE );
+			$result       = $wp_filesystem->put_contents( $filename, $file_content[ $css_type ], FS_CHMOD_FILE );
 			$total_result = ( $total_result && $result );
 		}
 
@@ -398,7 +398,7 @@ class TablePress_CSS {
 		 */
 		$path_difference = str_replace( $wp_filesystem->wp_content_dir(), '', trailingslashit( WP_CONTENT_DIR ) );
 
-		$css_types = array( 'normal', 'minified', 'combined' );
+		$css_types    = array( 'normal', 'minified', 'combined' );
 		$total_result = true; // whether all files were deleted successfully
 		foreach ( $css_types as $css_type ) {
 			$filename = $this->get_custom_css_location( $css_type, 'path' );
@@ -412,7 +412,7 @@ class TablePress_CSS {
 			}
 			// We have valid access to the filesystem now -> try to delete the file.
 			if ( $wp_filesystem->exists( $filename ) ) {
-				$result = $wp_filesystem->delete( $filename );
+				$result       = $wp_filesystem->delete( $filename );
 				$total_result = ( $total_result && $result );
 			}
 		}

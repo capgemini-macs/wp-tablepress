@@ -116,8 +116,8 @@ class CSV_Parser {
 		$data = &$this->import_data;
 
 		$delimiter_count = array();
-		$enclosed = false;
-		$current_line = 0;
+		$enclosed        = false;
+		$current_line    = 0;
 
 		// Walk through each character in the CSV string (up to $this->delimiter_search_max_lines) and search potential delimiter characters.
 		$data_length = strlen( $data );
@@ -189,8 +189,8 @@ class CSV_Parser {
 		}
 
 		// Check if the count in every line is the same (or one higher for an "almost").
-		$first = null;
-		$equal = null;
+		$first  = null;
+		$equal  = null;
 		$almost = false;
 		foreach ( $line_counts as $line => $count ) {
 			if ( is_null( $first ) ) {
@@ -198,7 +198,7 @@ class CSV_Parser {
 			} elseif ( $count === $first && false !== $equal ) {
 				$equal = true;
 			} elseif ( $count === $first + 1 && false !== $equal ) {
-				$equal = true;
+				$equal  = true;
 				$almost = true;
 			} else {
 				$equal = false;
@@ -211,8 +211,8 @@ class CSV_Parser {
 
 		// At this point, count is equal in all lines, so determine a string to sort priority.
 		$match = ( $almost ) ? 2 : 1;
-		$pref = strpos( $this->preferred_delimiter_chars, $char );
-		$pref = ( false !== $pref ) ? str_pad( $pref, 3, '0', STR_PAD_LEFT ) : '999';
+		$pref  = strpos( $this->preferred_delimiter_chars, $char );
+		$pref  = ( false !== $pref ) ? str_pad( $pref, 3, '0', STR_PAD_LEFT ) : '999';
 		return $pref . $match . '.' . ( 99999 - str_pad( $first, 5, '0', STR_PAD_LEFT ) );
 	}
 
@@ -230,11 +230,11 @@ class CSV_Parser {
 		// Filter delimiter from the list, if it is a whitespace character.
 		$white_spaces = str_replace( $delimiter, '', " \t\x0B\0" );
 
-		$rows = array(); // Complete rows.
-		$row = array(); // Row that is currently built.
-		$column = 0; // Current column index.
+		$rows         = array(); // Complete rows.
+		$row          = array(); // Row that is currently built.
+		$column       = 0; // Current column index.
 		$cell_content = ''; // Content of the currently processed cell.
-		$enclosed = false;
+		$enclosed     = false;
 		$was_enclosed = false; // To determine if the cell content will be trimmed of whitespace (only for enclosed cells).
 
 		// Walk through each character in the CSV string.
@@ -247,11 +247,11 @@ class CSV_Parser {
 				// Open/close quotes, and inline quotes.
 				if ( ! $enclosed ) {
 					if ( '' === ltrim( $cell_content, $white_spaces ) ) {
-						$enclosed = true;
+						$enclosed     = true;
 						$was_enclosed = true;
 					} else {
-						$this->error = 2;
-						$error_line = count( $rows ) + 1;
+						$this->error  = 2;
+						$error_line   = count( $rows ) + 1;
 						$error_column = $column + 1;
 						if ( ! isset( $this->error_info[ "{$error_line}-{$error_column}" ] ) ) {
 							$this->error_info[ "{$error_line}-{$error_column}" ] = array(
@@ -274,12 +274,12 @@ class CSV_Parser {
 					}
 					if ( $data[ $x ] === $delimiter ) {
 						$enclosed = false;
-						$i = $x;
+						$i        = $x;
 					} else {
 						if ( $this->error < 1 ) {
 							$this->error = 1;
 						}
-						$error_line = count( $rows ) + 1;
+						$error_line   = count( $rows ) + 1;
 						$error_column = $column + 1;
 						if ( ! isset( $this->error_info[ "{$error_line}-{$error_column}" ] ) ) {
 							$this->error_info[ "{$error_line}-{$error_column}" ] = array(
@@ -290,7 +290,7 @@ class CSV_Parser {
 							);
 						}
 						$cell_content .= $curr_char;
-						$enclosed = false;
+						$enclosed      = false;
 					}
 				} else {
 					// The " was the closing one for the cell.
@@ -300,15 +300,15 @@ class CSV_Parser {
 				// End of cell (by $delimiter), or end of line (by line break, and not enclosed!).
 
 				$row[ $column ] = ( $was_enclosed ) ? $cell_content : trim( $cell_content );
-				$cell_content = '';
-				$was_enclosed = false;
+				$cell_content   = '';
+				$was_enclosed   = false;
 				$column++;
 
 				// End of line.
 				if ( "\n" === $curr_char || "\r" === $curr_char ) {
 					// Append completed row.
 					$rows[] = $row;
-					$row = array();
+					$row    = array();
 					$column = 0;
 					if ( "\r" === $curr_char && "\n" === $next_char ) {
 						// Skip next character in \r\n line breaks.
