@@ -52,7 +52,7 @@ class TablePress_Post_Model extends TablePress_Model {
 		 * @param string $post_type The "Custom Post Type" that TablePress uses.
 		 */
 		$this->post_type = apply_filters( 'tablepress_post_type', $this->post_type );
-		$post_type_args = array(
+		$post_type_args  = array(
 			'labels'          => array(
 				'name' => 'TablePress Tables',
 			),
@@ -100,7 +100,7 @@ class TablePress_Post_Model extends TablePress_Model {
 			'tags_input'     => '',
 			'to_ping'        => '',
 		);
-		$post = array_merge( $default_post, $post );
+		$post         = array_merge( $default_post, $post );
 		// WP expects everything to be slashed.
 		$post = wp_slash( $post );
 
@@ -160,7 +160,7 @@ class TablePress_Post_Model extends TablePress_Model {
 			'tags_input'     => '',
 			'to_ping'        => '',
 		);
-		$post = array_merge( $default_post, $post );
+		$post         = array_merge( $default_post, $post );
 		// WP expects everything to be slashed.
 		$post = wp_slash( $post );
 
@@ -265,8 +265,8 @@ class TablePress_Post_Model extends TablePress_Model {
 		global $wpdb;
 
 		// Split post loading, to save memory.
-		$offset = 0;
-		$length = 100; // 100 posts at a time
+		$offset          = 0;
+		$length          = 100; // 100 posts at a time
 		$number_of_posts = count( $all_post_ids );
 		while ( $offset < $number_of_posts ) {
 			$post_ids = array_slice( $all_post_ids, $offset, $length );
@@ -274,7 +274,7 @@ class TablePress_Post_Model extends TablePress_Model {
 			$post_ids = _get_non_cached_ids( $post_ids, 'posts' );
 			if ( ! empty( $post_ids ) ) {
 				$post_ids_list = implode( ',', $post_ids );
-				$posts = $wpdb->get_results( "SELECT {$wpdb->posts}.* FROM {$wpdb->posts} WHERE ID IN ({$post_ids_list})" );
+				$posts         = $wpdb->get_results( "SELECT {$wpdb->posts}.* FROM {$wpdb->posts} WHERE ID IN ({$post_ids_list})" );
 				update_post_cache( $posts );
 				if ( $update_meta_cache ) {
 					// Get all post meta data for all table posts, @see get_post_meta().
@@ -309,7 +309,7 @@ class TablePress_Post_Model extends TablePress_Model {
 	 */
 	public function add_meta_field( $post_id, $field, $value ) {
 		// WP expects a slashed value.
-		$value = wp_slash( $value );
+		$value   = wp_slash( $value );
 		$success = add_post_meta( $post_id, $field, $value, true ); // true means unique
 		// Make sure that $success is a boolean, as add_post_meta() returns an ID or false.
 		$success = ( false === $success ) ? false : true;

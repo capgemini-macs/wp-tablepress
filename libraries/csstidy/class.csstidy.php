@@ -33,7 +33,7 @@ defined( 'ABSPATH' ) || die( 'No direct script access allowed!' );
  *  You should have received a copy of the GNU Lesser General Public License
  *  along with this program.  If not, see <https://www.gnu.org/licenses/>.
  *
- * @license https://opensource.org/licenses/lgpl-license.php GNU Lesser General Public License
+ * @license https://opensource.ośrg/licenses/lgpl-license.php GNU Lesser General Public License
  * @package CSSTidy
  * @author Florian Schmitz (floele at gmail dot com) 2005-2007
  * @author Brett Zamir (brettz9 at yahoo dot com) 2007
@@ -386,17 +386,17 @@ class TablePress_CSSTidy {
 		include dirname( __FILE__ ) . '/data.inc.php';
 		$this->data = $data;
 
-		$this->settings['remove_bslash'] = true;
-		$this->settings['compress_colors'] = true;
+		$this->settings['remove_bslash']        = true;
+		$this->settings['compress_colors']      = true;
 		$this->settings['compress_font-weight'] = true;
-		$this->settings['lowercase_s'] = false;
+		$this->settings['lowercase_s']          = false;
 		/*
 		 * 1 common shorthands optimization
 		 * 2 + font property optimization
 		 * 3 + background property optimization
 		 */
 		$this->settings['optimise_shorthands'] = 1;
-		$this->settings['remove_last_;'] = true;
+		$this->settings['remove_last_;']       = true;
 		// Rewrite all properties with lower case, better for later gzipping.
 		$this->settings['case_properties'] = 1;
 		/*
@@ -413,15 +413,15 @@ class TablePress_CSSTidy {
 		// Is dangerous to be used: CSS is broken sometimes.
 		$this->settings['merge_selectors'] = 0;
 		// Whether to preserve browser hacks.
-		$this->settings['discard_invalid_selectors'] = false;
+		$this->settings['discard_invalid_selectors']  = false;
 		$this->settings['discard_invalid_properties'] = false;
-		$this->settings['css_level'] = 'CSS3.0';
-		$this->settings['preserve_css'] = false;
-		$this->settings['timestamp'] = false;
-		$this->settings['template'] = ''; // say that property exists.
+		$this->settings['css_level']                  = 'CSS3.0';
+		$this->settings['preserve_css']               = false;
+		$this->settings['timestamp']                  = false;
+		$this->settings['template']                   = ''; // say that property exists.
 		$this->set_cfg( 'template', 'default' ); // Call load_template.
 
-		$this->print = new TablePress_CSSTidy_print( $this );
+		$this->print    = new TablePress_CSSTidy_print( $this );
 		$this->optimise = new TablePress_CSSTidy_optimise( $this );
 
 		$this->tokens_list = &$this->data['csstidy']['tokens'];
@@ -522,7 +522,7 @@ class TablePress_CSSTidy {
 			$line = $this->line;
 		}
 		$line = intval( $line );
-		$add = array(
+		$add  = array(
 			'm' => $message,
 			't' => $type,
 		);
@@ -542,7 +542,7 @@ class TablePress_CSSTidy {
 	 */
 	public function _unicode( &$string, &$i ) {
 		++$i;
-		$add = '';
+		$add      = '';
 		$replaced = false;
 
 		while ( $i < strlen( $string ) && ( ctype_xdigit( $string[ $i ] ) || ctype_space( $string[ $i ] ) ) && strlen( $add ) < 6 ) {
@@ -555,7 +555,7 @@ class TablePress_CSSTidy {
 
 		if ( hexdec( $add ) > 47 && hexdec( $add ) < 58 || hexdec( $add ) > 64 && hexdec( $add ) < 91 || hexdec( $add ) > 96 && hexdec( $add ) < 123 ) {
 			$this->log( 'Replaced unicode notation: Changed \\' . $add . ' to ' . chr( hexdec( $add ) ), 'Information' );
-			$add = chr( hexdec( $add ) );
+			$add      = chr( hexdec( $add ) );
 			$replaced = true;
 		} else {
 			$add = trim( '\\' . $add );
@@ -641,7 +641,7 @@ class TablePress_CSSTidy {
 			$content = strip_tags( file_get_contents( $content ), '<span>' );
 		}
 		// Unify newlines (because the output also only uses \n).
-		$content = str_replace( "\r\n", "\n", $content );
+		$content  = str_replace( "\r\n", "\n", $content );
 		$template = explode( '|', $content );
 
 		for ( $i = 0; $i < count( $template ); $i++ ) {
@@ -687,14 +687,14 @@ class TablePress_CSSTidy {
 		$old = @setlocale( LC_ALL, 0 );
 		@setlocale( LC_ALL, 'C' );
 
-		$all_properties = &$this->data['csstidy']['all_properties'];
-		$at_rules = &$this->data['csstidy']['at_rules'];
+		$all_properties           = &$this->data['csstidy']['all_properties'];
+		$at_rules                 = &$this->data['csstidy']['at_rules'];
 		$quoted_string_properties = &$this->data['csstidy']['quoted_string_properties'];
 
-		$this->css = array();
+		$this->css              = array();
 		$this->print->input_css = $string;
-		$string = str_replace( "\r\n", "\n", $string ) . ' ';
-		$cur_comment = '';
+		$string                 = str_replace( "\r\n", "\n", $string ) . ' ';
+		$cur_comment            = '';
 
 		for ( $i = 0, $size = strlen( $string ); $i < $size; $i++ ) {
 			if ( "\n" === $string[ $i ] || "\r" === $string[ $i ] ) {
@@ -711,7 +711,7 @@ class TablePress_CSSTidy {
 							$this->from[] = 'at';
 						} elseif ( '{' === $string[ $i ] ) {
 							$this->status = 'is';
-							$this->at = $this->css_new_media_section( $this->at );
+							$this->at     = $this->css_new_media_section( $this->at );
 							$this->_add_token( AT_START, $this->at );
 						} elseif ( ',' === $string[ $i ] ) {
 							$this->at = trim( $this->at ) . ',';
@@ -749,17 +749,17 @@ class TablePress_CSSTidy {
 									}
 									if ( 'atis' === $type ) {
 										$this->next_selector_at = ( $this->next_selector_at ? $this->next_selector_at : ( $this->at ? $this->at : DEFAULT_AT ) );
-										$this->at = $this->css_new_media_section( ' ' );
-										$type = 'is';
+										$this->at               = $this->css_new_media_section( ' ' );
+										$type                   = 'is';
 									}
-									$this->status = $type;
-									$i += strlen( $name );
+									$this->status     = $type;
+									$i               += strlen( $name );
 									$this->invalid_at = false;
 								}
 							}
 
 							if ( $this->invalid_at ) {
-								$this->selector = '@';
+								$this->selector  = '@';
 								$invalid_at_name = '';
 								for ( $j = $i + 1; $j < $size; ++$j ) {
 									if ( ! ctype_alpha( $string[ $j ] ) ) {
@@ -771,16 +771,16 @@ class TablePress_CSSTidy {
 							}
 						} elseif ( ( '"' === $string[ $i ] || "'" === $string[ $i ] ) ) {
 							$this->cur_string[] = $string[ $i ];
-							$this->status = 'instr';
-							$this->str_char[] = $string[ $i ];
-							$this->from[] = 'is';
+							$this->status       = 'instr';
+							$this->str_char[]   = $string[ $i ];
+							$this->from[]       = 'is';
 							/* Fixing CSS3 attribute selectors, i.e. a[href$=".mp3" */
 							$this->quoted_string[] = ( '=' === $string[ $i - 1 ] );
 						} elseif ( $this->invalid_at && ';' === $string[ $i ] ) {
 							$this->invalid_at = false;
-							$this->status = 'is';
+							$this->status     = 'is';
 							if ( $this->next_selector_at ) {
-								$this->at = $this->css_new_media_section( $this->next_selector_at );
+								$this->at               = $this->css_new_media_section( $this->next_selector_at );
 								$this->next_selector_at = '';
 							}
 						} elseif ( '{' === $string[ $i ] ) {
@@ -793,11 +793,11 @@ class TablePress_CSSTidy {
 							$this->added = false;
 						} elseif ( '}' === $string[ $i ] ) {
 							$this->_add_token( AT_END, $this->at );
-							$this->at = '';
-							$this->selector = '';
+							$this->at           = '';
+							$this->selector     = '';
 							$this->sel_separate = array();
 						} elseif ( ',' === $string[ $i ] ) {
-							$this->selector = trim( $this->selector ) . ',';
+							$this->selector       = trim( $this->selector ) . ',';
 							$this->sel_separate[] = strlen( $this->selector );
 						} elseif ( '\\' === $string[ $i ] ) {
 							$this->selector .= $this->_unicode( $string, $i );
@@ -829,13 +829,13 @@ class TablePress_CSSTidy {
 							$this->from[] = 'ip';
 						} elseif ( '}' === $string[ $i ] ) {
 							$this->explode_selectors();
-							$this->status = 'is';
+							$this->status     = 'is';
 							$this->invalid_at = false;
 							$this->_add_token( SEL_END, $this->selector );
 							$this->selector = '';
 							$this->property = '';
 							if ( $this->next_selector_at ) {
-								$this->at = $this->css_new_media_section( $this->next_selector_at );
+								$this->at               = $this->css_new_media_section( $this->next_selector_at );
 								$this->next_selector_at = '';
 							}
 						} elseif ( ';' === $string[ $i ] ) {
@@ -861,10 +861,10 @@ class TablePress_CSSTidy {
 							++$i;
 							$this->from[] = 'iv';
 						} elseif ( ( '"' === $string[ $i ] || "'" === $string[ $i ] || '(' === $string[ $i ] ) ) {
-							$this->cur_string[] = $string[ $i ];
-							$this->str_char[] = ( '(' === $string[ $i ] ) ? ')' : $string[ $i ];
-							$this->status = 'instr';
-							$this->from[] = 'iv';
+							$this->cur_string[]    = $string[ $i ];
+							$this->str_char[]      = ( '(' === $string[ $i ] ) ? ')' : $string[ $i ];
+							$this->status          = 'instr';
+							$this->from[]          = 'iv';
 							$this->quoted_string[] = in_array( strtolower( $this->property ), $quoted_string_properties, true );
 						} elseif ( ',' === $string[ $i ] ) {
 							$this->sub_value = trim( $this->sub_value ) . ',';
@@ -878,12 +878,12 @@ class TablePress_CSSTidy {
 									case '@charset':
 										// Add quotes to charset.
 										$this->sub_value_arr[] = '"' . trim( $this->sub_value ) . '"';
-										$this->charset = $this->sub_value_arr[0];
+										$this->charset         = $this->sub_value_arr[0];
 										break;
 									case '@namespace':
 										// Add quotes to namespace.
 										$this->sub_value_arr[] = '"' . trim( $this->sub_value ) . '"';
-										$this->namespace = implode( ' ', $this->sub_value_arr );
+										$this->namespace       = implode( ' ', $this->sub_value_arr );
 										break;
 									case '@import':
 										$this->sub_value = trim( $this->sub_value );
@@ -898,14 +898,14 @@ class TablePress_CSSTidy {
 										}
 
 										$this->sub_value_arr[] = $this->sub_value;
-										$this->import[] = implode( ' ', $this->sub_value_arr );
+										$this->import[]        = implode( ' ', $this->sub_value_arr );
 										break;
 								}
 
 								$this->sub_value_arr = array();
-								$this->sub_value = '';
-								$this->selector = '';
-								$this->sel_separate = array();
+								$this->sub_value     = '';
+								$this->selector      = '';
+								$this->sel_separate  = array();
 							} else {
 								$this->status = 'ip';
 							}
@@ -926,7 +926,7 @@ class TablePress_CSSTidy {
 							$this->optimise->subvalue();
 							if ( '' !== $this->sub_value ) {
 								$this->sub_value_arr[] = $this->sub_value;
-								$this->sub_value = '';
+								$this->sub_value       = '';
 							}
 
 							$this->value = '';
@@ -960,18 +960,18 @@ class TablePress_CSSTidy {
 								}
 							}
 
-							$this->property = '';
+							$this->property      = '';
 							$this->sub_value_arr = array();
-							$this->value = '';
+							$this->value         = '';
 						}
 						if ( '}' === $string[ $i ] ) {
 							$this->explode_selectors();
 							$this->_add_token( SEL_END, $this->selector );
-							$this->status = 'is';
+							$this->status     = 'is';
 							$this->invalid_at = false;
-							$this->selector = '';
+							$this->selector   = '';
 							if ( $this->next_selector_at ) {
-								$this->at = $this->css_new_media_section( $this->next_selector_at );
+								$this->at               = $this->css_new_media_section( $this->next_selector_at );
 								$this->next_selector_at = '';
 							}
 						}
@@ -982,24 +982,24 @@ class TablePress_CSSTidy {
 							$this->optimise->subvalue();
 							if ( '' !== $this->sub_value ) {
 								$this->sub_value_arr[] = $this->sub_value;
-								$this->sub_value = '';
+								$this->sub_value       = '';
 							}
 						}
 					}
 					break;
 				/* Case in string */
 				case 'instr':
-					$_str_char = $this->str_char[ count( $this->str_char ) - 1 ];
-					$_cur_string = $this->cur_string[ count( $this->cur_string ) - 1 ];
+					$_str_char      = $this->str_char[ count( $this->str_char ) - 1 ];
+					$_cur_string    = $this->cur_string[ count( $this->cur_string ) - 1 ];
 					$_quoted_string = $this->quoted_string[ count( $this->quoted_string ) - 1 ];
-					$temp_add = $string[ $i ];
+					$temp_add       = $string[ $i ];
 
 					// Add another string to the stack. Strings can't be nested inside of quotes, only parentheses,
 					// but parentheticals can be nested more than once.
 					if ( ')' === $_str_char && ( '(' === $string[ $i ] || '"' === $string[ $i ] || '\\' === $string[ $i ] ) && ! $this->escaped( $string, $i ) ) {
-						$this->cur_string[] = $string[ $i ];
-						$this->str_char[] = ( '(' === $string[ $i ] ) ? ')' : $string[ $i ];
-						$this->from[] = 'instr';
+						$this->cur_string[]    = $string[ $i ];
+						$this->str_char[]      = ( '(' === $string[ $i ] ) ? ')' : $string[ $i ];
+						$this->from[]          = 'instr';
 						$this->quoted_string[] = ( ')' === $_str_char && '(' !== $string[ $i ] && '(' === trim( $_cur_string ) ) ? $_quoted_string : ( '(' !== $string[ $i ] );
 						continue 2;
 					}
@@ -1094,8 +1094,8 @@ class TablePress_CSSTidy {
 	 */
 	protected function quote_font_format( $value ) {
 		if ( 0 === strncmp( $value, 'format', 6 ) ) {
-			$p = strpos( $value, ')', 7 );
-			$end = substr( $value, $p );
+			$p              = strpos( $value, ')', 7 );
+			$end            = substr( $value, $p );
 			$format_strings = $this->parse_string_list( substr( $value, 7, $p - 7 ) );
 			if ( ! $format_strings ) {
 				$value = '';
@@ -1118,8 +1118,8 @@ class TablePress_CSSTidy {
 	protected function explode_selectors() {
 		// Explode multiple selectors.
 		if ( 1 === $this->get_cfg( 'merge_selectors' ) ) {
-			$new_sels = array();
-			$lastpos = 0;
+			$new_sels             = array();
+			$lastpos              = 0;
 			$this->sel_separate[] = strlen( $this->selector );
 			foreach ( $this->sel_separate as $num => $pos ) {
 				if ( ( count( $this->sel_separate ) - 1 ) === $num ) {
@@ -1127,7 +1127,7 @@ class TablePress_CSSTidy {
 				}
 
 				$new_sels[] = substr( $this->selector, $lastpos, $pos - $lastpos - 1 );
-				$lastpos = $pos;
+				$lastpos    = $pos;
 			}
 
 			if ( count( $new_sels ) > 1 ) {
@@ -1341,8 +1341,8 @@ class TablePress_CSSTidy {
 	 */
 	protected function property_is_next( $istring, $pos ) {
 		$all_properties = &$this->data['csstidy']['all_properties'];
-		$istring = substr( $istring, $pos, strlen( $istring ) - $pos );
-		$pos = strpos( $istring, ':' );
+		$istring        = substr( $istring, $pos, strlen( $istring ) - $pos );
+		$pos            = strpos( $istring, ':' );
 		if ( false === $pos ) {
 			return false;
 		}
@@ -1396,18 +1396,18 @@ class TablePress_CSSTidy {
 
 		$strings = array();
 
-		$in_str = false;
+		$in_str         = false;
 		$current_string = '';
 
 		for ( $i = 0, $_len = strlen( $value ); $i < $_len; $i++ ) {
 			if ( ( ',' === $value[ $i ] || ' ' === $value[ $i ] ) && true === $in_str ) {
-				$in_str = false;
-				$strings[] = $current_string;
+				$in_str         = false;
+				$strings[]      = $current_string;
 				$current_string = '';
 			} elseif ( '"' === $value[ $i ] || "'" === $value[ $i ] ) {
 				if ( $in_str === $value[ $i ] ) {
-					$strings[] = $current_string;
-					$in_str = false;
+					$strings[]      = $current_string;
+					$in_str         = false;
 					$current_string = '';
 					continue;
 				} elseif ( ! $in_str ) {
@@ -1418,7 +1418,7 @@ class TablePress_CSSTidy {
 					$current_string .= $value[ $i ];
 				} else {
 					if ( ! preg_match( '/[\s,]/', $value[ $i ] ) ) {
-						$in_str = true;
+						$in_str         = true;
 						$current_string = $value[ $i ];
 					}
 				}

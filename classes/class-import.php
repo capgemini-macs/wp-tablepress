@@ -76,13 +76,13 @@ class TablePress_Import {
 		}
 
 		// Initiate here, because function call not possible outside a class method.
-		$this->import_formats = array();
+		$this->import_formats        = array();
 		$this->import_formats['csv'] = __( 'CSV - Character-Separated Values', 'tablepress' );
 		if ( $this->html_import_support_available ) {
 			$this->import_formats['html'] = __( 'HTML - Hypertext Markup Language', 'tablepress' );
 		}
 		$this->import_formats['json'] = __( 'JSON - JavaScript Object Notation', 'tablepress' );
-		$this->import_formats['xls'] = __( 'XLS - Microsoft Excel 97-2003 (experimental)', 'tablepress' );
+		$this->import_formats['xls']  = __( 'XLS - Microsoft Excel 97-2003 (experimental)', 'tablepress' );
 		$this->import_formats['xlsx'] = __( 'XLSX - Microsoft Excel 2007-2013 (experimental)', 'tablepress' );
 	}
 
@@ -133,8 +133,8 @@ class TablePress_Import {
 	protected function import_csv() {
 		$csv_parser = TablePress::load_class( 'CSV_Parser', 'csv-parser.class.php', 'libraries' );
 		$csv_parser->load_data( $this->import_data );
-		$delimiter = $csv_parser->find_delimiter();
-		$data = $csv_parser->parse( $delimiter );
+		$delimiter            = $csv_parser->find_delimiter();
+		$data                 = $csv_parser->parse( $delimiter );
 		$this->imported_table = array( 'data' => $this->pad_array_to_max_cols( $data ) );
 	}
 
@@ -198,7 +198,14 @@ class TablePress_Import {
 						break;
 				}
 			}
-			wp_die( $output, 'Import Error', array( 'response' => 200, 'back_link' => true ) );
+			wp_die(
+				$output,
+				'Import Error',
+				array(
+					'response'  => 200,
+					'back_link' => true,
+				)
+			);
 		}
 
 		$html_table = array(
@@ -206,7 +213,7 @@ class TablePress_Import {
 			'options' => array(),
 		);
 		if ( isset( $table->thead ) ) {
-			$html_table['data'] = array_merge( $html_table['data'], $this->_import_html_rows( $table->thead[0]->tr ) );
+			$html_table['data']                  = array_merge( $html_table['data'], $this->_import_html_rows( $table->thead[0]->tr ) );
 			$html_table['options']['table_head'] = true;
 		}
 		if ( isset( $table->tbody ) ) {
@@ -216,11 +223,11 @@ class TablePress_Import {
 			$html_table['data'] = array_merge( $html_table['data'], $this->_import_html_rows( $table->tr ) );
 		}
 		if ( isset( $table->tfoot ) ) {
-			$html_table['data'] = array_merge( $html_table['data'], $this->_import_html_rows( $table->tfoot[0]->tr ) );
+			$html_table['data']                  = array_merge( $html_table['data'], $this->_import_html_rows( $table->tfoot[0]->tr ) );
 			$html_table['options']['table_foot'] = true;
 		}
 
-		$html_table['data'] = $this->pad_array_to_max_cols( $html_table['data'] );
+		$html_table['data']   = $this->pad_array_to_max_cols( $html_table['data'] );
 		$this->imported_table = $html_table;
 	}
 
@@ -244,7 +251,7 @@ class TablePress_Import {
 					 * see https://secure.php.net/manual/en/simplexmlelement.asxml.php#107137.
 					 */
 					$matches[1] = html_entity_decode( $matches[1], ENT_NOQUOTES, 'UTF-8' );
-					$new_row[] = $matches[1];
+					$new_row[]  = $matches[1];
 
 					// Look for colspan and add correct number of cells.
 					if ( 1 === preg_match( '#<t(?:d|h).*colspan="(\d+)".*?>#is', $cell->asXml(), $matches ) ) {
@@ -272,13 +279,20 @@ class TablePress_Import {
 		// Check if JSON could be decoded.
 		if ( is_null( $json_table ) ) {
 			// If possible, try to find out what error prevented the JSON from being decoded.
-			$json_error = 'The error could not be determined.';
+			$json_error     = 'The error could not be determined.';
 			$json_error_msg = json_last_error_msg();
 			if ( false !== $json_error_msg ) {
 				$json_error = $json_error_msg;
 			}
 			$output = '<strong>' . __( 'The imported file contains errors:', 'tablepress' ) . "</strong><br /><br />JSON error: {$json_error}<br />";
-			wp_die( $output, 'Import Error', array( 'response' => 200, 'back_link' => true ) );
+			wp_die(
+				$output,
+				'Import Error',
+				array(
+					'response'  => 200,
+					'back_link' => true,
+				)
+			);
 		} else {
 			// Specifically cast to an array again.
 			$json_table = (array) $json_table;
@@ -295,7 +309,7 @@ class TablePress_Import {
 			}
 		}
 
-		$table['data'] = $this->pad_array_to_max_cols( $table['data'] );
+		$table['data']        = $this->pad_array_to_max_cols( $table['data'] );
 		$this->imported_table = $table;
 	}
 
@@ -313,11 +327,11 @@ class TablePress_Import {
 		for ( $row = 1; $row <= $excel_reader->rowcount( $sheet ); $row++ ) {
 			$table_row = array();
 			for ( $col = 1; $col <= $excel_reader->colcount( $sheet ); $col++ ) {
-				$cell = array();
+				$cell            = array();
 				$cell['rowspan'] = $excel_reader->rowspan( $row, $col, $sheet );
 				$cell['colspan'] = $excel_reader->colspan( $row, $col, $sheet );
-				$cell['val'] = $excel_reader->val( $row, $col, $sheet );
-				$table_row[] = $cell;
+				$cell['val']     = $excel_reader->val( $row, $col, $sheet );
+				$table_row[]     = $cell;
 			}
 			$table[] = $table_row;
 		}
@@ -376,7 +390,14 @@ class TablePress_Import {
 			$this->imported_table = array( 'data' => $xlsx_file->rows() );
 		} else {
 			$output = '<strong>' . __( 'The imported file contains errors:', 'tablepress' ) . '</strong><br /><br />' . SimpleXLSX::parse_error() . '<br />';
-			wp_die( $output, 'Import Error', array( 'response' => 200, 'back_link' => true ) );
+			wp_die(
+				$output,
+				'Import Error',
+				array(
+					'response'  => 200,
+					'back_link' => true,
+				)
+			);
 		}
 	}
 
@@ -389,13 +410,13 @@ class TablePress_Import {
 	 * @return array Padded array.
 	 */
 	public function pad_array_to_max_cols( array $array ) {
-		$rows = count( $array );
-		$rows = ( $rows > 0 ) ? $rows : 1;
+		$rows        = count( $array );
+		$rows        = ( $rows > 0 ) ? $rows : 1;
 		$max_columns = $this->count_max_columns( $array );
 		$max_columns = ( $max_columns > 0 ) ? $max_columns : 1;
 		// array_map wants arrays as additional parameters, so we create one with the max_columns to pad to and one with the value to use (empty string).
 		$max_columns_array = array_fill( 1, $rows, $max_columns );
-		$pad_values_array = array_fill( 1, $rows, '' );
+		$pad_values_array  = array_fill( 1, $rows, '' );
 		return array_map( 'array_pad', $array, $max_columns_array, $pad_values_array );
 	}
 

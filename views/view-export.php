@@ -31,12 +31,14 @@ class TablePress_Export_View extends TablePress_View {
 	public function setup( $action, array $data ) {
 		parent::setup( $action, $data );
 
-		$this->process_action_messages( array(
-			'error_export'          => __( 'Error: The export failed.', 'tablepress' ),
-			'error_load_table'      => __( 'Error: This table could not be loaded!', 'tablepress' ),
-			'error_table_corrupted' => __( 'Error: The internal data of this table is corrupted!', 'tablepress' ),
-			'error_create_zip_file' => __( 'Error: The ZIP file could not be created.', 'tablepress' ),
-		) );
+		$this->process_action_messages(
+			array(
+				'error_export'          => __( 'Error: The export failed.', 'tablepress' ),
+				'error_load_table'      => __( 'Error: This table could not be loaded!', 'tablepress' ),
+				'error_table_corrupted' => __( 'Error: The internal data of this table is corrupted!', 'tablepress' ),
+				'error_create_zip_file' => __( 'Error: The ZIP file could not be created.', 'tablepress' ),
+			)
+		);
 
 		$this->add_text_box( 'head', array( $this, 'textbox_head' ), 'normal' );
 		if ( 0 === $data['tables_count'] ) {
@@ -82,7 +84,7 @@ class TablePress_Export_View extends TablePress_View {
 	 * @param array $box  Information about the meta box.
 	 */
 	public function postbox_no_tables( array $data, array $box ) {
-		$add_url = TablePress::url( array( 'action' => 'add' ) );
+		$add_url    = TablePress::url( array( 'action' => 'add' ) );
 		$import_url = TablePress::url( array( 'action' => 'import' ) );
 		?>
 		<p><?php _e( 'No tables found.', 'tablepress' ); ?></p>
@@ -99,7 +101,7 @@ class TablePress_Export_View extends TablePress_View {
 	 * @param array $box  Information about the meta box.
 	 */
 	public function postbox_export_form( array $data, array $box ) {
-?>
+		?>
 <table class="tablepress-postbox-table fixed">
 <tbody>
 	<tr>
@@ -114,9 +116,9 @@ class TablePress_Export_View extends TablePress_View {
 		<td class="column-2">
 			<input type="hidden" name="export[tables_list]" id="tables-export-list" value="" />
 			<?php
-				$select_size = $data['tables_count'] + 1; // to show at least one empty row in the select
-				$select_size = max( $select_size, 3 );
-				$select_size = min( $select_size, 12 );
+				$select_size   = $data['tables_count'] + 1; // to show at least one empty row in the select
+				$select_size   = max( $select_size, 3 );
+				$select_size   = min( $select_size, 12 );
 				$size_multiple = ( $data['zip_support_available'] ) ? " size=\"{$select_size}\" multiple=\"multiple\"" : '';
 			?>
 			<select id="tables-export" name="export[tables][]"<?php echo $size_multiple; ?>>
@@ -130,7 +132,7 @@ class TablePress_Export_View extends TablePress_View {
 				if ( '' === trim( $table['name'] ) ) {
 					$table['name'] = __( '(no name)', 'tablepress' );
 				}
-				$text = esc_html( sprintf( __( 'ID %1$s: %2$s', 'tablepress' ), $table['id'], $table['name'] ) );
+				$text     = esc_html( sprintf( __( 'ID %1$s: %2$s', 'tablepress' ), $table['id'], $table['name'] ) );
 				$selected = selected( true, in_array( $table['id'], $data['export_ids'], true ), false );
 				echo "<option{$selected} value=\"{$table['id']}\">{$text}</option>";
 			}
@@ -174,10 +176,10 @@ class TablePress_Export_View extends TablePress_View {
 		<td class="column-2">
 		<?php
 		if ( $data['zip_support_available'] ) {
-		?>
+			?>
 		<input type="checkbox" id="tables-export-zip-file" name="export[zip_file]" value="true" />
 		<label for="tables-export-zip-file"><?php _e( 'Create a ZIP archive.', 'tablepress' ); ?> <span id="tables-export-zip-file-description" class="description hide-if-js"><?php _e( '(Mandatory if more than one table is selected.)', 'tablepress' ); ?></span></label>
-		<?php
+			<?php
 		} else {
 			_e( 'Note: Support for ZIP file creation seems not to be available on this server.', 'tablepress' );
 		}
@@ -186,7 +188,7 @@ class TablePress_Export_View extends TablePress_View {
 	</tr>
 </tbody>
 </table>
-<?php
+		<?php
 	}
 
 } // class TablePress_Export_View

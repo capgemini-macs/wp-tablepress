@@ -183,7 +183,7 @@ class TablePress_Table_Model extends TablePress_Model {
 		parent::__construct();
 		$this->model_post = TablePress::load_model( 'post' );
 
-		$params = array(
+		$params       = array(
 			'option_name'   => 'tablepress_tables',
 			'default_value' => $this->default_tables,
 		);
@@ -279,7 +279,7 @@ class TablePress_Table_Model extends TablePress_Model {
 
 			// If possible, try to find out what error prevented the JSON from being decoded.
 			$table['json_error'] = 'The error could not be determined.';
-			$json_error_msg = json_last_error_msg();
+			$json_error_msg      = json_last_error_msg();
 			if ( false !== $json_error_msg ) {
 				$table['json_error'] = $json_error_msg;
 			}
@@ -320,7 +320,7 @@ class TablePress_Table_Model extends TablePress_Model {
 
 		$table = $this->_post_to_table( $post, $table_id, $load_data );
 		if ( $load_options_visibility ) {
-			$table['options'] = $this->_get_table_options( $post_id );
+			$table['options']    = $this->_get_table_options( $post_id );
 			$table['visibility'] = $this->_get_table_visibility( $post_id );
 		}
 		return $table;
@@ -413,7 +413,7 @@ class TablePress_Table_Model extends TablePress_Model {
 			return new WP_Error( 'table_save_no_post_id_for_table_id', '', $table['id'] );
 		}
 
-		$post = $this->_table_to_post( $table, $post_id );
+		$post        = $this->_table_to_post( $table, $post_id );
 		$new_post_id = $this->model_post->update( $post );
 		if ( is_wp_error( $new_post_id ) ) {
 			// Add an error code to the existing WP_Error.
@@ -463,8 +463,8 @@ class TablePress_Table_Model extends TablePress_Model {
 	 * @return string|WP_Error WP_Error on error, string table ID of the new table on success.
 	 */
 	public function add( array $table, $copy_or_add = 'add' ) {
-		$post_id = -1; // to insert table
-		$post = $this->_table_to_post( $table, $post_id );
+		$post_id     = -1; // to insert table
+		$post        = $this->_table_to_post( $table, $post_id );
 		$new_post_id = $this->model_post->insert( $post );
 		if ( is_wp_error( $new_post_id ) ) {
 			// Add an error code to the existing WP_Error.
@@ -665,7 +665,7 @@ class TablePress_Table_Model extends TablePress_Model {
 	 */
 	public function invalidate_table_output_cache( $table_id ) {
 		$caches_list_transient_name = 'tablepress_c_' . md5( $table_id );
-		$caches_list = get_transient( $caches_list_transient_name );
+		$caches_list                = get_transient( $caches_list_transient_name );
 		if ( false !== $caches_list ) {
 			$caches_list = (array) json_decode( $caches_list, true );
 			foreach ( $caches_list as $cache_transient_name ) {
@@ -738,7 +738,7 @@ class TablePress_Table_Model extends TablePress_Model {
 	 * @param int $post_id Post ID.
 	 */
 	protected function _update_post_id( $table_id, $post_id ) {
-		$tables = $this->tables->get();
+		$tables                            = $this->tables->get();
 		$tables['table_post'][ $table_id ] = $post_id;
 		uksort( $tables['table_post'], 'strnatcasecmp' );
 		$this->tables->update( $tables );
@@ -905,7 +905,7 @@ class TablePress_Table_Model extends TablePress_Model {
 		|| ! isset( $new_table['visibility']['columns'] ) ) {
 			return new WP_Error( 'table_prepare_visibility_not_set' );
 		}
-		$new_table['visibility']['rows'] = array_map( 'intval', $new_table['visibility']['rows'] );
+		$new_table['visibility']['rows']    = array_map( 'intval', $new_table['visibility']['rows'] );
 		$new_table['visibility']['columns'] = array_map( 'intval', $new_table['visibility']['columns'] );
 
 		// Check dimensions of table data array (not done for newly added, copied, or imported tables).
@@ -916,7 +916,7 @@ class TablePress_Table_Model extends TablePress_Model {
 				return new WP_Error( 'table_prepare_size_check_numbers_not_set' );
 			}
 			// Table data needs to be ok, and have the correct number of rows and columns.
-			$new_table['number']['rows'] = intval( $new_table['number']['rows'] );
+			$new_table['number']['rows']    = intval( $new_table['number']['rows'] );
 			$new_table['number']['columns'] = intval( $new_table['number']['columns'] );
 			if ( 0 === $new_table['number']['rows']
 			|| 0 === $new_table['number']['columns']
@@ -935,11 +935,11 @@ class TablePress_Table_Model extends TablePress_Model {
 				|| ! isset( $new_table['number']['hidden_columns'] ) ) {
 					return new WP_Error( 'table_prepare_extended_visibility_check_numbers_not_set' );
 				}
-				$new_table['number']['hidden_rows'] = intval( $new_table['number']['hidden_rows'] );
+				$new_table['number']['hidden_rows']    = intval( $new_table['number']['hidden_rows'] );
 				$new_table['number']['hidden_columns'] = intval( $new_table['number']['hidden_columns'] );
 				// Count hidden and visible rows.
 				$num_visible_rows = count( array_keys( $new_table['visibility']['rows'], 1 ) );
-				$num_hidden_rows = count( array_keys( $new_table['visibility']['rows'], 0 ) );
+				$num_hidden_rows  = count( array_keys( $new_table['visibility']['rows'], 0 ) );
 				// Check number of hidden and visible rows.
 				if ( $new_table['number']['hidden_rows'] !== $num_hidden_rows
 				|| ( $new_table['number']['rows'] - $new_table['number']['hidden_rows'] ) !== $num_visible_rows ) {
@@ -947,7 +947,7 @@ class TablePress_Table_Model extends TablePress_Model {
 				}
 				// Count hidden and visible columns.
 				$num_visible_columns = count( array_keys( $new_table['visibility']['columns'], 1 ) );
-				$num_hidden_columns = count( array_keys( $new_table['visibility']['columns'], 0 ) );
+				$num_hidden_columns  = count( array_keys( $new_table['visibility']['columns'], 0 ) );
 				// Check number of hidden and visible columns.
 				if ( $new_table['number']['hidden_columns'] !== $num_hidden_columns
 				|| ( $new_table['number']['columns'] - $new_table['number']['hidden_columns'] ) !== $num_visible_columns ) {
@@ -959,13 +959,13 @@ class TablePress_Table_Model extends TablePress_Model {
 		// All checks were successful, replace original values with new ones.
 
 		// $table['id'] is either false (and remains false) or already equal to $new_table['id'].
-		$table['new_id'] = isset( $new_table['new_id'] ) ? $new_table['new_id'] : $table['id'];
-		$table['name'] = $new_table['name'];
+		$table['new_id']      = isset( $new_table['new_id'] ) ? $new_table['new_id'] : $table['id'];
+		$table['name']        = $new_table['name'];
 		$table['description'] = $new_table['description'];
-		$table['data'] = $new_table['data'];
+		$table['data']        = $new_table['data'];
 		// $table['author'] = get_current_user_id(); // We don't want this, as it would override the original author.
 		// $table['created'] = current_time( 'mysql' ); // We don't want this, as it would override the original datetime.
-		$table['last_modified'] = current_time( 'mysql' );
+		$table['last_modified']          = current_time( 'mysql' );
 		$table['options']['last_editor'] = get_current_user_id();
 		// Table Options.
 		if ( isset( $new_table['options'] ) ) { // is for example not set for newly added tables
@@ -983,13 +983,13 @@ class TablePress_Table_Model extends TablePress_Model {
 				}
 			}
 			// Merge new options.
-			$default_table = $this->get_table_template();
-			$table['options'] = array_intersect_key( $table['options'], $default_table['options'] );
+			$default_table        = $this->get_table_template();
+			$table['options']     = array_intersect_key( $table['options'], $default_table['options'] );
 			$new_table['options'] = array_intersect_key( $new_table['options'], $default_table['options'] );
-			$table['options'] = array_merge( $table['options'], $new_table['options'] );
+			$table['options']     = array_merge( $table['options'], $new_table['options'] );
 		}
 		// Table Visibility.
-		$table['visibility']['rows'] = $new_table['visibility']['rows'];
+		$table['visibility']['rows']    = $new_table['visibility']['rows'];
 		$table['visibility']['columns'] = $new_table['visibility']['columns'];
 		// Convert DataTables 1.9 parameters (Hungarian notation) to DataTables 1.10 parameters (camelCase notation).
 		if ( '' !== $table['options']['datatables_custom_commands'] ) {
@@ -1204,7 +1204,7 @@ class TablePress_Table_Model extends TablePress_Model {
 				continue;
 			}
 			// Run search/replace.
-			$old_custom_commands = $table_options['datatables_custom_commands'];
+			$old_custom_commands                         = $table_options['datatables_custom_commands'];
 			$table_options['datatables_custom_commands'] = strtr( $table_options['datatables_custom_commands'], $this->datatables_parameter_mappings );
 			// No need to save (which runs a DB query) if nothing was replaced in the "Custom Commands".
 			if ( $old_custom_commands === $table_options['datatables_custom_commands'] ) {
@@ -1247,7 +1247,7 @@ class TablePress_Table_Model extends TablePress_Model {
 
 		foreach ( $table_post as $table_id => $post_id ) {
 			$caches_list_transient_name = 'tablepress_c_' . md5( $table_id );
-			$caches_list = get_transient( $caches_list_transient_name );
+			$caches_list                = get_transient( $caches_list_transient_name );
 			if ( is_array( $caches_list ) ) {
 				foreach ( $caches_list as $cache_transient_name => $dummy_value ) {
 					delete_transient( $cache_transient_name );
@@ -1362,7 +1362,7 @@ class TablePress_Table_Model extends TablePress_Model {
 
 		// Find all table IDs that map to the post ID of the table that is currently being exported.
 		$table_post = $this->tables->get( 'table_post' );
-		$table_ids = array_keys( $table_post, (int) $meta->post_id, true );
+		$table_ids  = array_keys( $table_post, (int) $meta->post_id, true );
 
 		// Bail if no table IDs are mapped to this post ID.
 		if ( empty( $table_ids ) ) {
@@ -1370,7 +1370,7 @@ class TablePress_Table_Model extends TablePress_Model {
 		}
 
 		// Pretend that there is a `_tablepress_export_table_id` post meta field with the list of table IDs.
-		$key = '_tablepress_export_table_id';
+		$key   = '_tablepress_export_table_id';
 		$value = wxr_cdata( implode( ',', $table_ids ) );
 
 		// Hijack the filter and print extra XML code for our faked post meta field.

@@ -27,9 +27,9 @@ class SimpleXLSX {
 	 * XML Schema URLs.
 	 */
 	const SCHEMA_REL_OFFICEDOCUMENT = 'http://schemas.openxmlformats.org/officeDocument/2006/relationships/officeDocument';
-	const SCHEMA_REL_SHAREDSTRINGS = 'http://schemas.openxmlformats.org/officeDocument/2006/relationships/sharedStrings';
-	const SCHEMA_REL_WORKSHEET = 'http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet';
-	const SCHEMA_REL_STYLES = 'http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles';
+	const SCHEMA_REL_SHAREDSTRINGS  = 'http://schemas.openxmlformats.org/officeDocument/2006/relationships/sharedStrings';
+	const SCHEMA_REL_WORKSHEET      = 'http://schemas.openxmlformats.org/officeDocument/2006/relationships/worksheet';
+	const SCHEMA_REL_STYLES         = 'http://schemas.openxmlformats.org/officeDocument/2006/relationships/styles';
 
 	/**
 	 * [$workbook description]
@@ -272,7 +272,7 @@ class SimpleXLSX {
 		$ref = (string) $ws->dimension['ref'];
 
 		if ( false !== strpos( $ref, ':' ) ) {
-			$d = explode( ':', $ref );
+			$d     = explode( ':', $ref );
 			$index = $this->_columnIndex( $d[1] );
 			return array( $index[0] + 1, $index[1] + 1 );
 		}
@@ -300,7 +300,7 @@ class SimpleXLSX {
 			return false;
 		}
 
-		$rows = array();
+		$rows        = array();
 		$current_row = 0;
 
 		list( $cols, ) = $this->dimension( $worksheet_index );
@@ -308,7 +308,7 @@ class SimpleXLSX {
 		foreach ( $ws->sheetData->row as $row ) {
 			$rows[ $current_row ] = array();
 			foreach ( $row->c as $c ) {
-				list( $current_cell, ) = $this->_columnIndex( (string) $c['r'] );
+				list( $current_cell, )                 = $this->_columnIndex( (string) $c['r'] );
 				$rows[ $current_row ][ $current_cell ] = $this->value( $c );
 			}
 			for ( $i = 0; $i < $cols; $i++ ) {
@@ -335,16 +335,16 @@ class SimpleXLSX {
 			return false;
 		}
 
-		$rows = array();
-		$current_row = 0;
+		$rows          = array();
+		$current_row   = 0;
 		list( $cols, ) = $this->dimension( $worksheet_index );
 
 		foreach ( $ws->sheetData->row as $row ) {
 			$r_idx = (int) $row['r'];
 			foreach ( $row->c as $c ) {
-				$r = (string) $c['r'];
-				$t = (string) $c['t'];
-				$s = (int) $c['s'];
+				$r                     = (string) $c['r'];
+				$t                     = (string) $c['t'];
+				$s                     = (int) $c['s'];
 				list( $current_cell, ) = $this->_columnIndex( $r );
 				if ( $s > 0 && isset( $this->workbook_cell_formats[ $s ] ) ) {
 					$format = $this->workbook_cell_formats[ $s ]['format'];
@@ -402,7 +402,7 @@ class SimpleXLSX {
 			list( , $col, $row ) = $m;
 
 			$colLen = strlen( $col );
-			$index = 0;
+			$index  = 0;
 
 			for ( $i = $colLen - 1; $i >= 0; $i-- ) {
 				$index += ( ord( $col[ $i ] ) - 64 ) * pow( 26, $colLen - $i - 1 );
@@ -520,9 +520,9 @@ class SimpleXLSX {
 	protected function _unzip( $filename, $is_data = false ) {
 		if ( $is_data ) {
 			$this->package['filename'] = 'default.xlsx';
-			$this->package['mtime'] = time();
-			$this->package['size'] = strlen( $filename );
-			$vZ = $filename;
+			$this->package['mtime']    = time();
+			$this->package['size']     = strlen( $filename );
+			$vZ                        = $filename;
 		} else {
 			if ( ! is_readable( $filename ) ) {
 				$this->error( 'File not found ' . $filename );
@@ -531,8 +531,8 @@ class SimpleXLSX {
 
 			// Package information.
 			$this->package['filename'] = $filename;
-			$this->package['mtime'] = filemtime( $filename );
-			$this->package['size'] = filesize( $filename );
+			$this->package['mtime']    = filemtime( $filename );
+			$this->package['size']     = filesize( $filename );
 
 			// Read file.
 			$vZ = file_get_contents( $filename );
@@ -557,7 +557,7 @@ class SimpleXLSX {
 		);
 
 		// Normal way.
-		$aP = unpack( 'x16/v1CL', $aE[1] );
+		$aP                       = unpack( 'x16/v1CL', $aE[1] );
 		$this->package['comment'] = substr( $aE[1], 18, $aP['CL'] );
 
 		// Translates end of line from other operating systems.
@@ -572,8 +572,8 @@ class SimpleXLSX {
 
 		// Loop through the entries.
 		foreach ( $aE as $vZ ) {
-			$aI = array();
-			$aI['E'] = 0;
+			$aI       = array();
+			$aI['E']  = 0;
 			$aI['EM'] = '';
 			// Retrieving local file header information.
 			// $aP = unpack( 'v1VN/v1GPF/v1CM/v1FT/v1FD/V1CRC/V1CS/V1UCS/v1FNL', $vZ );
@@ -587,9 +587,9 @@ class SimpleXLSX {
 
 			// Special case: value block after the compressed data.
 			if ( $aP['GPF'] & 0x0008 ) {
-				$aP1 = unpack( 'V1CRC/V1CS/V1UCS', substr( $vZ, -12 ) );
+				$aP1       = unpack( 'V1CRC/V1CS/V1UCS', substr( $vZ, -12 ) );
 				$aP['CRC'] = $aP1['CRC'];
-				$aP['CS'] = $aP1['CS'];
+				$aP['CS']  = $aP1['CS'];
 				$aP['UCS'] = $aP1['UCS'];
 				// 2013-08-10
 				$vZ = substr( $vZ, 0, -12 );
@@ -614,7 +614,7 @@ class SimpleXLSX {
 			$vZ = substr( $vZ, 26 + $nF + $mF );
 
 			if ( strlen( $vZ ) !== (int) $aP['CS'] ) { // Check only if available.
-				$aI['E'] = 1;
+				$aI['E']  = 1;
 				$aI['EM'] = 'Compressed size is not equal with the value in header information.';
 			} elseif ( $bE ) {
 				$aI['E']  = 5;
@@ -747,7 +747,7 @@ class SimpleXLSX {
 			$entry_xml = preg_replace( '/<\/[a-zA-Z0-9]+:([^>]+)>/', '</$1>', $entry_xml ); // fix namespaced closed tags
 
 			// XML External Entity (XXE) Prevention.
-			$_old_value = libxml_disable_entity_loader( true );
+			$_old_value   = libxml_disable_entity_loader( true );
 			$entry_xmlobj = simplexml_load_string( $entry_xml );
 			libxml_disable_entity_loader( $_old_value );
 			if ( $entry_xmlobj ) {
@@ -813,21 +813,21 @@ class SimpleXLSX {
 	protected function _parse() {
 		// Document data holders.
 		$this->sharedstrings = array();
-		$this->sheets = array();
+		$this->sheets        = array();
 		// $this->styles = array();
 
 		// Read relations and search for officeDocument.
 		if ( $relations = $this->getEntryXML( '_rels/.rels' ) ) {
 			foreach ( $relations->Relationship as $rel ) {
-				$rel_type = trim( (string) $rel['Type'] );
+				$rel_type   = trim( (string) $rel['Type'] );
 				$rel_target = trim( (string) $rel['Target'] );
- 				if ( self::SCHEMA_REL_OFFICEDOCUMENT === $rel_type && $this->workbook = $this->getEntryXML( $rel_target ) ) {
- 					$index_rId = array(); // [0 => rId1]
+				if ( self::SCHEMA_REL_OFFICEDOCUMENT === $rel_type && $this->workbook = $this->getEntryXML( $rel_target ) ) {
+					$index_rId = array(); // [0 => rId1]
 
 					$index = 0;
 					foreach ( $this->workbook->sheets->sheet as $s ) {
 						$this->sheetNames[ $index ] = (string) $s['name'];
-						$index_rId[ $index ] = (string) $s['id'];
+						$index_rId[ $index ]        = (string) $s['id'];
 						$index++;
 					}
 
@@ -841,7 +841,7 @@ class SimpleXLSX {
 							}
 							if ( self::SCHEMA_REL_WORKSHEET === $wrel_type ) {
 								if ( $sheet = $this->getEntryXML( $wrel_path ) ) {
-									$index = array_search( (string) $workbookRelation['Id'], $index_rId, false );
+									$index                  = array_search( (string) $workbookRelation['Id'], $index_rId, false );
 									$this->sheets[ $index ] = $sheet;
 								}
 							} elseif ( self::SCHEMA_REL_SHAREDSTRINGS === $wrel_type ) {
@@ -866,11 +866,11 @@ class SimpleXLSX {
 
 								if ( null !== $this->styles->cellXfs->xf ) {
 									foreach ( $this->styles->cellXfs->xf as $v ) {
-										$v = (array) $v->attributes();
+										$v           = (array) $v->attributes();
 										$v['format'] = '';
 
 										if ( isset( $v['@attributes']['numFmtId'] ) ) {
-											$v = $v['@attributes'];
+											$v   = $v['@attributes'];
 											$fid = (int) $v['numFmtId'];
 											if ( isset( self::$built_in_cell_formats[ $fid ] ) ) {
 												$v['format'] = self::$built_in_cell_formats[ $fid ];
@@ -948,7 +948,7 @@ class SimpleXLSX {
 	 * @return [type] [description]
 	 */
 	public static function parse_error( $set = '' ) {
-		static $error = '';
+		static $error                   = '';
 		return ( '' !== $set ) ? $error = $set : $error;
 	}
 

@@ -61,17 +61,17 @@ class TablePress_Test_TablePress_Utils extends TablePress_TestCase {
 	 */
 	public function data_letter_to_number() {
 		return array(
-			array(    '',     0 ),
-			array(   'a',     1 ),
-			array(   'A',     1 ),
-			array(   'Z',    26 ),
-			array(  'AA',    27 ),
-			array(  'Aa',    27 ),
-			array(  'aA',    27 ),
-			array(  'aa',    27 ),
-			array(  'AZ',    52 ),
-			array(  'BA',    53 ),
-			array( 'AAA',   703 ),
+			array( '', 0 ),
+			array( 'a', 1 ),
+			array( 'A', 1 ),
+			array( 'Z', 26 ),
+			array( 'AA', 27 ),
+			array( 'Aa', 27 ),
+			array( 'aA', 27 ),
+			array( 'aa', 27 ),
+			array( 'AZ', 52 ),
+			array( 'BA', 53 ),
+			array( 'AAA', 703 ),
 			array( 'ZZZ', 18278 ),
 			array( 'zzz', 18278 ),
 		);
@@ -100,14 +100,14 @@ class TablePress_Test_TablePress_Utils extends TablePress_TestCase {
 	 */
 	public function data_number_to_letter() {
 		return array(
-			array(    -1,    '' ),
-			array(     0,    '' ),
-			array(     1,   'A' ),
-			array(    26,   'Z' ),
-			array(    27,  'AA' ),
-			array(    52,  'AZ' ),
-			array(    53,  'BA' ),
-			array(   703, 'AAA' ),
+			array( -1, '' ),
+			array( 0, '' ),
+			array( 1, 'A' ),
+			array( 26, 'Z' ),
+			array( 27, 'AA' ),
+			array( 52, 'AZ' ),
+			array( 53, 'BA' ),
+			array( 703, 'AAA' ),
 			array( 18278, 'ZZZ' ),
 		);
 	}
@@ -119,7 +119,7 @@ class TablePress_Test_TablePress_Utils extends TablePress_TestCase {
 	 */
 	public function test_url_not_toplevel() {
 		TablePress::$controller->is_top_level_page = false;
-		TablePress::$controller->parent_page = 'index.php';
+		TablePress::$controller->parent_page       = 'index.php';
 
 		$this->assertSame( 'http://example.org/wp-admin/index.php?page=tablepress&action=list', TablePress::url() );
 		$this->assertSame( 'http://example.org/wp-admin/index.php?page=tablepress&action=list', TablePress::url( array(), false ) );
@@ -132,7 +132,7 @@ class TablePress_Test_TablePress_Utils extends TablePress_TestCase {
 	 */
 	public function test_url_toplevel() {
 		TablePress::$controller->is_top_level_page = true;
-		TablePress::$controller->parent_page = 'middle';
+		TablePress::$controller->parent_page       = 'middle';
 
 		$this->assertSame( 'http://example.org/wp-admin/admin.php?page=tablepress', TablePress::url() );
 		$this->assertSame( 'http://example.org/wp-admin/admin.php?page=tablepress', TablePress::url( array(), false ) );

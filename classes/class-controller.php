@@ -63,7 +63,7 @@ abstract class TablePress_Controller {
 		 * Using `TablePress::$model_options` and `TablePress::$model_table` is recommended!
 		 */
 		$this->model_options = TablePress::$model_options;
-		$this->model_table = TablePress::$model_table;
+		$this->model_table   = TablePress::$model_table;
 
 		// Update check, in all controllers (frontend and admin), to make sure we always have up-to-date options, should be done very early.
 		$this->plugin_update_check();
@@ -75,7 +75,7 @@ abstract class TablePress_Controller {
 		 *
 		 * @param string $parent_page Current admin menu parent page.
 		 */
-		$this->parent_page = apply_filters( 'tablepress_admin_menu_parent_page', TablePress::$model_options->get( 'admin_menu_parent_page' ) );
+		$this->parent_page       = apply_filters( 'tablepress_admin_menu_parent_page', TablePress::$model_options->get( 'admin_menu_parent_page' ) );
 		$this->is_top_level_page = in_array( $this->parent_page, array( 'top', 'middle', 'bottom' ), true );
 	}
 
@@ -98,10 +98,12 @@ abstract class TablePress_Controller {
 
 			if ( 0 === TablePress::$model_options->get( 'first_activation' ) ) {
 				// Save initial set of plugin options, and time of first activation of the plugin, on first activation.
-				TablePress::$model_options->update( array(
-					'first_activation'          => current_time( 'timestamp' ),
-					'plugin_options_db_version' => TablePress::db_version,
-				) );
+				TablePress::$model_options->update(
+					array(
+						'first_activation'          => current_time( 'timestamp' ),
+						'plugin_options_db_version' => TablePress::db_version,
+					)
+				);
 			} else {
 				// Update Plugin Options Options, if necessary.
 				TablePress::$model_options->merge_plugin_options_defaults();
@@ -124,7 +126,7 @@ abstract class TablePress_Controller {
 					 */
 					require_once ABSPATH . 'wp-admin/includes/template.php';
 					$tablepress_css = TablePress::load_class( 'TablePress_CSS', 'class-css.php', 'classes' );
-					$result = $tablepress_css->save_custom_css_to_file( TablePress::$model_options->get( 'custom_css' ), TablePress::$model_options->get( 'custom_css_minified' ) );
+					$result         = $tablepress_css->save_custom_css_to_file( TablePress::$model_options->get( 'custom_css' ), TablePress::$model_options->get( 'custom_css_minified' ) );
 					// If saving was successful, use "Custom CSS" file.
 					$updated_options['use_custom_css_file'] = $result;
 					// Increase the "Custom CSS" version number for cache busting.
@@ -170,9 +172,11 @@ abstract class TablePress_Controller {
 				TablePress::$model_table->merge_table_options_tp06();
 			}
 
-			TablePress::$model_options->update( array(
-				'table_scheme_db_version' => TablePress::table_scheme_version,
-			) );
+			TablePress::$model_options->update(
+				array(
+					'table_scheme_db_version' => TablePress::table_scheme_version,
+				)
+			);
 		}
 
 		/*
@@ -181,9 +185,11 @@ abstract class TablePress_Controller {
 		 */
 		if ( is_user_logged_in() && ( TablePress::$model_options->get( 'user_options_db_version' ) < TablePress::db_version ) ) {
 			TablePress::$model_options->merge_user_options_defaults();
-			TablePress::$model_options->update( array(
-				'user_options_db_version' => TablePress::db_version,
-			) );
+			TablePress::$model_options->update(
+				array(
+					'user_options_db_version' => TablePress::db_version,
+				)
+			);
 		}
 	}
 

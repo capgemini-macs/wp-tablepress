@@ -96,9 +96,9 @@ class TablePress_Frontend_Controller extends TablePress_Controller {
 	 */
 	public function enqueue_css() {
 		/** This filter is documented in controllers/controller-frontend.php */
-		$use_default_css = apply_filters( 'tablepress_use_default_css', true );
-		$custom_css = TablePress::$model_options->get( 'custom_css' );
-		$use_custom_css = ( TablePress::$model_options->get( 'use_custom_css' ) && '' !== $custom_css );
+		$use_default_css     = apply_filters( 'tablepress_use_default_css', true );
+		$custom_css          = TablePress::$model_options->get( 'custom_css' );
+		$use_custom_css      = ( TablePress::$model_options->get( 'use_custom_css' ) && '' !== $custom_css );
 		$use_custom_css_file = ( $use_custom_css && TablePress::$model_options->get( 'use_custom_css_file' ) );
 		/**
 		 * Filter the "Custom CSS" version number that is appended to the enqueued CSS files
@@ -112,8 +112,8 @@ class TablePress_Frontend_Controller extends TablePress_Controller {
 		$tablepress_css = TablePress::load_class( 'TablePress_CSS', 'class-css.php', 'classes' );
 
 		// Determine Default CSS URL.
-		$rtl = ( is_rtl() ) ? '-rtl' : '';
-		$suffix = SCRIPT_DEBUG ? '' : '.min';
+		$rtl                        = ( is_rtl() ) ? '-rtl' : '';
+		$suffix                     = SCRIPT_DEBUG ? '' : '.min';
 		$unfiltered_default_css_url = plugins_url( "css/default{$rtl}{$suffix}.css", TABLEPRESS__FILE__ );
 		/**
 		 * Filter the URL from which the TablePress Default CSS file is loaded.
@@ -204,7 +204,7 @@ class TablePress_Frontend_Controller extends TablePress_Controller {
 	 */
 	protected function _enqueue_datatables() {
 		$js_file = 'js/jquery.datatables.min.js';
-		$js_url = plugins_url( $js_file, TABLEPRESS__FILE__ );
+		$js_url  = plugins_url( $js_file, TABLEPRESS__FILE__ );
 		/**
 		 * Filter the URL from which the DataTables JavaScript library file is loaded.
 		 *
@@ -322,7 +322,7 @@ class TablePress_Frontend_Controller extends TablePress_Controller {
 					$parameters['scrollX'] = '"scrollX":true';
 				}
 				if ( false !== $js_options['datatables_scrolly'] ) {
-					$parameters['scrollY'] = '"scrollY":"' . preg_replace( '#[^0-9a-z.%]#', '', $js_options['datatables_scrolly'] ) . '"';
+					$parameters['scrollY']        = '"scrollY":"' . preg_replace( '#[^0-9a-z.%]#', '', $js_options['datatables_scrolly'] ) . '"';
 					$parameters['scrollCollapse'] = '"scrollCollapse":true';
 				}
 				if ( ! empty( $js_options['datatables_custom_commands'] ) ) {
@@ -390,7 +390,7 @@ class TablePress_Frontend_Controller extends TablePress_Controller {
 		foreach ( $datatables_languages as $locale => $language_file ) {
 			$strings = file_get_contents( $language_file );
 			// Remove unnecessary white space.
-			$strings = str_replace( array( "\n", "\r", "\t" ), '', $strings );
+			$strings             = str_replace( array( "\n", "\r", "\t" ), '', $strings );
 			$datatables_strings .= "DataTables_language[\"{$locale}\"]={$strings};\n";
 		}
 		if ( ! empty( $datatables_strings ) ) {
@@ -524,7 +524,7 @@ JS;
 			);
 		}
 		$this->shown_tables[ $table_id ]['count']++;
-		$count = $this->shown_tables[ $table_id ]['count'];
+		$count                     = $this->shown_tables[ $table_id ]['count'];
 		$render_options['html_id'] = "tablepress-{$table_id}";
 		if ( $count > 1 ) {
 			$render_options['html_id'] .= "-no-{$count}";
@@ -553,7 +553,12 @@ JS;
 		 * @param string $table_id The current table ID.
 		 */
 		if ( is_user_logged_in() && apply_filters( 'tablepress_edit_link_below_table', true, $table['id'] ) && current_user_can( 'tablepress_edit_table', $table['id'] ) ) {
-			$render_options['edit_table_url'] = TablePress::url( array( 'action' => 'edit', 'table_id' => $table['id'] ) );
+			$render_options['edit_table_url'] = TablePress::url(
+				array(
+					'action'   => 'edit',
+					'table_id' => $table['id'],
+				)
+			);
 		}
 
 		/**
@@ -608,9 +613,9 @@ JS;
 		// Check if table output shall and can be loaded from the transient cache, otherwise generate the output.
 		if ( $render_options['cache_table_output'] && ! is_user_logged_in() ) {
 			// Hash the Render Options array to get a unique cache identifier.
-			$table_hash = md5( wp_json_encode( $render_options, TABLEPRESS_JSON_OPTIONS ) );
+			$table_hash     = md5( wp_json_encode( $render_options, TABLEPRESS_JSON_OPTIONS ) );
 			$transient_name = 'tablepress_' . $table_hash; // Attention: This string must not be longer than 45 characters!
-			$output = get_transient( $transient_name );
+			$output         = get_transient( $transient_name );
 			if ( false === $output || '' === $output ) {
 				// Render/generate the table HTML, as it was not found in the cache.
 				$_render->set_input( $table, $render_options );
@@ -619,7 +624,7 @@ JS;
 				set_transient( $transient_name, $output, DAY_IN_SECONDS );
 				// Update output caches list transient (necessary for cache invalidation upon table saving).
 				$caches_list_transient_name = 'tablepress_c_' . md5( $table_id );
-				$caches_list = get_transient( $caches_list_transient_name );
+				$caches_list                = get_transient( $caches_list_transient_name );
 				if ( false === $caches_list ) {
 					$caches_list = array();
 				} else {
@@ -679,7 +684,7 @@ JS;
 		 * @param array $default_shortcode_atts The [table-info] Shortcode default attributes.
 		 */
 		$default_shortcode_atts = apply_filters( 'tablepress_shortcode_table_info_default_shortcode_atts', $default_shortcode_atts );
-		$shortcode_atts = shortcode_atts( $default_shortcode_atts, $shortcode_atts ); // Optional third argument left out on purpose. Use filter in the next line instead.
+		$shortcode_atts         = shortcode_atts( $default_shortcode_atts, $shortcode_atts ); // Optional third argument left out on purpose. Use filter in the next line instead.
 		/**
 		 * Filter the attributes that were passed to the [table-info] Shortcode.
 		 *
@@ -720,7 +725,7 @@ JS;
 			return $message;
 		}
 
-		$field = preg_replace( '/[^a-z_]/', '', strtolower( $shortcode_atts['field'] ) );
+		$field  = preg_replace( '/[^a-z_]/', '', strtolower( $shortcode_atts['field'] ) );
 		$format = preg_replace( '/[^a-z]/', '', strtolower( $shortcode_atts['format'] ) );
 
 		// Generate output, depending on what information (field) was asked for.
@@ -736,8 +741,8 @@ JS;
 						break;
 					case 'human':
 						$modified_timestamp = strtotime( $table['last_modified'] );
-						$current_timestamp = current_time( 'timestamp' );
-						$time_diff = $current_timestamp - $modified_timestamp;
+						$current_timestamp  = current_time( 'timestamp' );
+						$time_diff          = $current_timestamp - $modified_timestamp;
 						// Time difference is only shown up to one day.
 						if ( $time_diff >= 0 && $time_diff < DAY_IN_SECONDS ) {
 							$output = sprintf( __( '%s ago', 'default' ), human_time_diff( $modified_timestamp, $current_timestamp ) ); // No `tablepress` text domain as translations are not loaded.
@@ -747,11 +752,11 @@ JS;
 						break;
 					case 'date':
 						$modified_timestamp = strtotime( $table['last_modified'] );
-						$output = date_i18n( get_option( 'date_format' ), $modified_timestamp );
+						$output             = date_i18n( get_option( 'date_format' ), $modified_timestamp );
 						break;
 					case 'time':
 						$modified_timestamp = strtotime( $table['last_modified'] );
-						$output = date_i18n( get_option( 'time_format' ), $modified_timestamp );
+						$output             = date_i18n( get_option( 'time_format' ), $modified_timestamp );
 						break;
 					case 'mysql':
 					default:
@@ -883,16 +888,16 @@ JS;
 		// For all found table IDs for each search term, add additional OR statement to the SQL "WHERE" clause.
 
 		// If $_GET['exact'] is set, WordPress doesn't use % in SQL LIKE clauses.
-		$exact = get_query_var( 'exact' );
-		$n = ( empty( $exact ) ) ? '%' : '';
+		$exact      = get_query_var( 'exact' );
+		$n          = ( empty( $exact ) ) ? '%' : '';
 		$search_sql = $wpdb->remove_placeholder_escape( $search_sql );
 		foreach ( $query_result as $search_term => $table_ids ) {
 			$search_term = esc_sql( $wpdb->esc_like( $search_term ) );
-			$old_or = "OR ({$wpdb->posts}.post_content LIKE '{$n}{$search_term}{$n}')";
-			$table_ids = implode( '|', $table_ids );
-			$regexp = '\\\\[' . TablePress::$shortcode . ' id=(["\\\']?)(' . $table_ids . ')([\]"\\\' /])'; // ' needs to be single escaped, [ double escaped (with \\) in mySQL
-			$new_or = $old_or . " OR ({$wpdb->posts}.post_content REGEXP '{$regexp}')";
-			$search_sql = str_replace( $old_or, $new_or, $search_sql );
+			$old_or      = "OR ({$wpdb->posts}.post_content LIKE '{$n}{$search_term}{$n}')";
+			$table_ids   = implode( '|', $table_ids );
+			$regexp      = '\\\\[' . TablePress::$shortcode . ' id=(["\\\']?)(' . $table_ids . ')([\]"\\\' /])'; // ' needs to be single escaped, [ double escaped (with \\) in mySQL
+			$new_or      = $old_or . " OR ({$wpdb->posts}.post_content REGEXP '{$regexp}')";
+			$search_sql  = str_replace( $old_or, $new_or, $search_sql );
 		}
 		$search_sql = $wpdb->add_placeholder_escape( $search_sql );
 
